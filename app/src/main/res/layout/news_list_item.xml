@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/news_drawable"
+    android:layout_marginBottom="5dp"
+    android:paddingBottom="10dp"
+    android:layout_marginHorizontal="1dp"
+    android:id="@+id/articleContainer">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/clArticle">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/colorWhite"
+            android:layout_marginVertical="1dp"
+            android:padding="10dp"
+            android:textSize="25dp"
+            />
+
+        <ImageView
+            android:id="@+id/articleImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/tvDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/articleImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="16dp"
+            android:textColor="@color/colorWhite"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="10dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ViewSwitcher
+        android:id="@+id/viewSwitcher"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/clArticle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp">
+
+        <LinearLayout
+            android:id="@+id/likeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/like_drawable">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/like_text"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"/>
+
+            <ImageView
+                android:id="@+id/likeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/like_icon_drawable" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dislikeContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/like_drawable">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dislike_text"
+                android:textColor="@color/colorBlack"
+                android:textStyle="bold"
+                android:layout_gravity="center_vertical"
+                android:textSize="20dp"
+                android:layout_marginLeft="10dp"/>
+
+            <ImageView
+                android:id="@+id/dislikeButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/liked_icon_drawable" />
+
+        </LinearLayout>
+
+    </ViewSwitcher>
+
+    <LinearLayout
+        android:id="@+id/shareContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/clArticle"
+        app:layout_constraintRight_toRightOf="parent"
+        android:background="@drawable/like_drawable"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share_text"
+            android:textColor="@color/colorBlack"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"/>
+
+        <ImageView
+            android:id="@+id/shareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/share_icon_drawable" />
+
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

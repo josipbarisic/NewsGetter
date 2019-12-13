@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">News Getter</string>
+    <string name="headlines_button">Naslovnice</string>
+    <string name="home_button">Vijesti iz Hrvatske</string>
+    <string name="search_hint">Pretraži vijesti</string>
+    <string name="search_button">Pretraži</string>
+    <string name="search_warning">Unesite pojam za pretragu!</string>
+    <string name="like_text">Sviđa mi se</string>
+    <string name="dislike_text">Ne sviđa mi se</string>
+    <string name="share_text">Podijeli</string>
+</resources>
