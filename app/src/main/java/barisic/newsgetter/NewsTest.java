@@ -6,21 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.media.MediaScannerConnection;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.widget.Toast;
 
 import java.net.NetworkInterface;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import barisic.newsgetter.adapters.RecyclerViewAdapter;
@@ -48,7 +39,6 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiRespo
         }
 //        Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
 
-
         ApiManager.getInstance().service().getNews(url).enqueue(this);
     }
 
@@ -58,22 +48,34 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiRespo
             NewsApiResponse news = response.body();
             ArrayList<Article> articles = news.getResponse();
 
-            ArrayList<Article> filteredArticles = new ArrayList<>();
+            ArrayList<Article> filteredArticlesJutarnji = new ArrayList<>();
+            ArrayList<Article> filteredArticlesGuardian = new ArrayList<>();
+
+            String newspaper = "";
 
             //api filter
             for(Article article: articles){
                 if(article.getArticleUrl().contains("jutarnji.hr/vijesti")){
-                    filteredArticles.add(article);
+                    filteredArticlesJutarnji.add(article);
+                    newspaper = "jutarnji";
                 }
-
+                if(article.getArticleUrl().contains("theguardian")){
+                    filteredArticlesGuardian.add(article);
+                    newspaper = "guardian";
+                }
+                Log.d("URLS", "onResponse: " + article.getArticleUrl());
             }
-            Log.d("RESULT", "onResponse: " + filteredArticles.size());
 
-            if(filteredArticles.size() > 0){
-                initRecyclerView(filteredArticles);
-            }
-            else{
-                initRecyclerView(articles);
+            switch (newspaper){
+                case "jutarnji":
+                    initRecyclerView(filteredArticlesJutarnji);
+                    break;
+                case "guardian":
+                    initRecyclerView(filteredArticlesGuardian);
+                    break;
+                default:
+                    initRecyclerView(articles);
+                    break;
             }
         }
     }

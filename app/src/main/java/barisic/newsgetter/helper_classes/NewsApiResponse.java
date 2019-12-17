@@ -12,9 +12,4 @@ public class NewsApiResponse {
         return articles;
     }
 
-    /*@NonNull
-    @Override
-    public String toString() {
-        return articles.toString();
-    }*/
 }

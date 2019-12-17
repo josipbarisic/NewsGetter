@@ -16,19 +16,13 @@ import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
-
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import barisic.newsgetter.ArticleSingle;
 import barisic.newsgetter.R;
 import barisic.newsgetter.helper_classes.Article;
 
@@ -49,8 +43,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         viewHolder.articleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(viewHolder.articleUrl));
-                v.getContext().startActivity(browserIntent);
+                //Otvori clanak u browseru
+                /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(viewHolder.articleUrl));
+                v.getContext().startActivity(browserIntent);*/
+
+                //Otvori clanak u article single-u
+                Intent intent = new Intent(v.getContext(), ArticleSingle.class);
+                intent.putExtra("url", viewHolder.articleUrl);
+
+                v.getContext().startActivity(intent);
+
             }
         });
 
@@ -102,14 +104,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
+        String imageUrl = dataset.get(position).getImageUrl();
+
+        viewHolder.tvDate.setText(dataset.get(position).getDate());
         viewHolder.tvTitle.setText(dataset.get(position).getTitle());
         viewHolder.articleUrl = dataset.get(position).getArticleUrl();
         viewHolder.articleDescription.setText(dataset.get(position).getDescription());
-        viewHolder.like_position = position;
+        //Postavljanje slike u ImageView s Picasso library-em
+        if(imageUrl != null && !imageUrl.matches("")){
+            Picasso.get().load(imageUrl).into(viewHolder.articleImage);
+        }
 
-        //Provjera pozicije lajkanog clanka (u adapteru) i postavljanje buttona u like ili dislike drawable kod RecyclerView elemenata
+        //Provjera pozicije clanka (u adapteru) i postavljanje buttona u like ili dislike drawable kod RecyclerView elemenata
         if(!vhPosition.isEmpty() && !vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
-
             viewHolder.viewSwitcher.showPrevious();
         }
         else if(!vhPosition.isEmpty() && vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
@@ -117,12 +124,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
         Log.d("BINDER", "onBindViewHolder: " + viewHolder.getAdapterPosition());
         //-----------------------------------------------------
-
-        String imageUrl = dataset.get(position).getImageUrl();
-
-        if(imageUrl != null && !imageUrl.matches("")){
-            Picasso.get().load(imageUrl).into(viewHolder.articleImage);
-        }
     }
 
     @Override
@@ -131,8 +132,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder{
+        TextView tvDate;
         TextView tvTitle;
-        String articleUrl;
         ImageView articleImage;
         TextView articleDescription;
         ConstraintLayout articleLayout;
@@ -141,11 +142,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         LinearLayout dislikeContainer;
         LinearLayout shareContainer;
 
-        int like_position;
+        String articleImageUrl;
+        String articleUrl;
 
         public CustomViewHolder(@NonNull View itemView, int viewType){
             super(itemView);
 
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             articleImage = itemView.findViewById(R.id.articleImage);
             articleDescription = itemView.findViewById(R.id.tvDescription);

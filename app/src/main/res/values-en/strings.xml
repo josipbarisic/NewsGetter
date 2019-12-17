@@ -9,4 +9,5 @@
     <string name="like_text">Like</string>
     <string name="dislike_text">Dislike</string>
     <string name="share_text">Share</string>
+    <string name="browse_button">Open in web browser</string>
 </resources>

@@ -8,4 +8,5 @@
     <string name="like_text">Sviđa mi se</string>
     <string name="dislike_text">Ne sviđa mi se</string>
     <string name="share_text">Podijeli</string>
+    <string name="browse_button">Otvori u web pregledniku</string>
 </resources>

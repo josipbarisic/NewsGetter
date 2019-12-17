@@ -21,23 +21,33 @@
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:textColor="@color/colorWhite"
-            android:layout_marginVertical="1dp"
             android:padding="10dp"
+            android:layout_marginTop="10dp"
             android:textSize="25dp"
+            android:textColor="@color/lightWhite"
+            android:textStyle="bold"
             />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:textColor="@color/lightWhite"
+            android:background="@color/eerieBlack"
+            android:padding="5dp"
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/articleImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            app:layout_constraintTop_toBottomOf="@id/tvDate"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:paddingBottom="10dp"/>
+            android:paddingTop="1dp"/>
 
         <TextView
             android:id="@+id/tvDescription"
@@ -47,7 +57,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:textSize="16dp"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/lightWhite"
+            android:layout_marginTop="20dp"
             android:paddingHorizontal="20dp"
             android:paddingBottom="10dp"/>
 
@@ -72,7 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/like_text"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/richBlack"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:textSize="20dp"
@@ -96,7 +107,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/dislike_text"
-                android:textColor="@color/colorBlack"
+                android:textColor="@color/richBlack"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:textSize="20dp"
@@ -128,7 +139,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/share_text"
-            android:textColor="@color/colorBlack"
+            android:textColor="@color/richBlack"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"
             android:textSize="20dp"
