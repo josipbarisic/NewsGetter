@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +34,16 @@ public class ArticleSingle extends AppCompatActivity {
 
             final String url = i.getExtras().getString("url");
 
-            webArticle = new ArticleScraper(url, webArticle).getArticle();
+//            webArticle = new ArticleScraper(url, webArticle).getArticle();
+            webArticle.loadUrl(url);
+            /*webArticle.setWebViewClient(new WebViewClient(){
+                @Override
+                public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+                    view.loadUrl(url);
+                    return true;
+                }
+            });
+            webArticle.loadUrl(url);*/
             browseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

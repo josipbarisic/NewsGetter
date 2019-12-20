@@ -10,4 +10,6 @@
     <string name="dislike_text">Dislike</string>
     <string name="share_text">Share</string>
     <string name="browse_button">Open in web browser</string>
+    <string name="choose_source">Select sources</string>
+    <string name="confirm_sources">Confirm</string>
 </resources>

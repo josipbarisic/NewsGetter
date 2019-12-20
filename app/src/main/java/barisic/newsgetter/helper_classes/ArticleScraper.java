@@ -41,10 +41,11 @@ public class ArticleScraper {
 
             @Override
             protected void onPostExecute(Document html) {
-                sArticleText = html.toString();
+                /*sArticleText = html.toString();
                 sArticleText = sArticleText.replace("\"", "'");
 
-                wvArticle.loadDataWithBaseURL("", sArticleText, "text/html", "utf-8", "");
+                wvArticle.loadDataWithBaseURL("", sArticleText, "text/html", "utf-8", "");*/
+                wvArticle.loadUrl(url);
             }
         }.execute(url);
 

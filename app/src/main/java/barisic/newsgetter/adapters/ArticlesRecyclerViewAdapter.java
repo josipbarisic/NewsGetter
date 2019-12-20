@@ -26,11 +26,11 @@ import barisic.newsgetter.ArticleSingle;
 import barisic.newsgetter.R;
 import barisic.newsgetter.helper_classes.Article;
 
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<Article> dataset;
     ArrayList<Integer> vhPosition = new ArrayList<>();
 
-    public RecyclerViewAdapter(List<Article> list){
+    public ArticlesRecyclerViewAdapter(List<Article> list){
         dataset = list;
     }
 

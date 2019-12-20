@@ -1,6 +1,5 @@
 package barisic.newsgetter;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,15 +13,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import barisic.newsgetter.adapters.RecyclerViewAdapter;
+import barisic.newsgetter.adapters.ArticlesRecyclerViewAdapter;
 import barisic.newsgetter.helper_classes.ApiManager;
 import barisic.newsgetter.helper_classes.Article;
-import barisic.newsgetter.helper_classes.NewsApiResponse;
+import barisic.newsgetter.helper_classes.NewsApiArticles;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewsTest extends AppCompatActivity implements Callback<NewsApiResponse> {
+public class NewsTest extends AppCompatActivity implements Callback<NewsApiArticles> {
     String url;
 
     @Override
@@ -39,13 +38,13 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiRespo
         }
 //        Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
 
-        ApiManager.getInstance().service().getNews(url).enqueue(this);
+        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(this);
     }
 
     @Override
-    public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+    public void onResponse(Call<NewsApiArticles> call, Response<NewsApiArticles> response) {
         if(response.isSuccessful() && response.body() != null){
-            NewsApiResponse news = response.body();
+            NewsApiArticles news = response.body();
             ArrayList<Article> articles = news.getResponse();
 
             ArrayList<Article> filteredArticlesJutarnji = new ArrayList<>();
@@ -81,7 +80,7 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiRespo
     }
 
     @Override
-    public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+    public void onFailure(Call<NewsApiArticles> call, Throwable t) {
         t.printStackTrace();
     }
 
@@ -125,7 +124,7 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiRespo
 
     public void initRecyclerView(ArrayList<Article> titles){
         final RecyclerView recyclerView = findViewById(R.id.news_recycler_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(titles);
+        ArticlesRecyclerViewAdapter adapter = new ArticlesRecyclerViewAdapter(titles);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

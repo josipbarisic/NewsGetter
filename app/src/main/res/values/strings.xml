@@ -9,4 +9,6 @@
     <string name="dislike_text">Ne sviđa mi se</string>
     <string name="share_text">Podijeli</string>
     <string name="browse_button">Otvori u web pregledniku</string>
+    <string name="choose_source">Odaberite izvore</string>
+    <string name="confirm_sources">Potvrdi</string>
 </resources>

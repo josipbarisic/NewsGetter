@@ -13,6 +13,7 @@ import android.widget.ImageView;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import barisic.newsgetter.activities.SettingsActivity;
@@ -31,9 +32,6 @@ public class MainActivity extends AppCompatActivity{
     ViewPager viewPager;
     ImageView imageView;
 
-
-    String url = "";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
@@ -46,11 +44,22 @@ public class MainActivity extends AppCompatActivity{
         viewPager= findViewById(R.id.viewPager);
 
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        Intent intent = getIntent();
+        if(intent.getExtras() != null){
+            Log.d("MAIN_SOURCES", "onCreate: " + intent.getExtras().getStringArrayList("domains"));
+            ArrayList<String> names = intent.getExtras().getStringArrayList("names");
+            ArrayList<String> domains = intent.getExtras().getStringArrayList("domains");
+            for(String domain: domains){
+                adapter.addFragment(new NewsFragment(domain), names.get(domains.indexOf(domain)));
+            }
+        }
+
         adapter.addFragment(new NewsFragment("jutarnji.hr"), "Jutarnji");
-        adapter.addFragment(new NewsFragment("bbc.co.uk"), "BBC");
+        /*adapter.addFragment(new NewsFragment("bbc.co.uk"), "BBC");
         adapter.addFragment(new NewsFragment("nytimes.com"), "New York Times");
         adapter.addFragment(new NewsFragment("elmundo.es"), "El Mundo");
-        adapter.addFragment(new NewsFragment("techcrunch.com"), "Techcrunch");
+        adapter.addFragment(new NewsFragment("techcrunch.com"), "Techcrunch");*/
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

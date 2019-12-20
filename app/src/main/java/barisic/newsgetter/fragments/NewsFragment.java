@@ -17,16 +17,16 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import barisic.newsgetter.R;
-import barisic.newsgetter.adapters.RecyclerViewAdapter;
+import barisic.newsgetter.adapters.ArticlesRecyclerViewAdapter;
 import barisic.newsgetter.helper_classes.ApiManager;
 import barisic.newsgetter.helper_classes.Article;
-import barisic.newsgetter.helper_classes.NewsApiResponse;
+import barisic.newsgetter.helper_classes.NewsApiArticles;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class NewsFragment extends Fragment implements Callback<NewsApiResponse> {
+public class NewsFragment extends Fragment implements Callback<NewsApiArticles> {
 
     String url;
 
@@ -42,7 +42,14 @@ public class NewsFragment extends Fragment implements Callback<NewsApiResponse> 
     //MOVE LOGIC FROM CONSTRUCTOR (POTENTIAL CRASH)
     public NewsFragment(String domain){
 
-        this.url = "everything?domains="+ domain +"&pageSize=100&from="+ date +"&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+        if(domain == "jutarnji.hr"){
+            this.url = "everything?domains="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+        }
+        else{
+            this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+        }
+//        this.url = "everything?domains="+ domain +"&pageSize=100&from="+ date +"&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+//        this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
     }
 
     @Nullable
@@ -50,15 +57,15 @@ public class NewsFragment extends Fragment implements Callback<NewsApiResponse> 
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_news, container, false);
-        ApiManager.getInstance().service().getNews(url).enqueue(this);
+        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(this);
 
         return view;
     }
 
     @Override
-    public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+    public void onResponse(Call<NewsApiArticles> call, Response<NewsApiArticles> response) {
         if(response.isSuccessful() && response != null){
-            NewsApiResponse apiResponse = response.body();
+            NewsApiArticles apiResponse = response.body();
             ArrayList<Article> articles = apiResponse.getResponse();
 
             initRecyclerView(getView(), articles);
@@ -67,13 +74,13 @@ public class NewsFragment extends Fragment implements Callback<NewsApiResponse> 
     }
 
     @Override
-    public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+    public void onFailure(Call<NewsApiArticles> call, Throwable t) {
 
     }
 
     private void initRecyclerView(View view, ArrayList<Article> articles){
         final RecyclerView recyclerView = view.findViewById(R.id.news_recycler_view);
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(articles);
+        ArticlesRecyclerViewAdapter adapter = new ArticlesRecyclerViewAdapter(articles);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }

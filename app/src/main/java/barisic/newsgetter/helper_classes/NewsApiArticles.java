@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 
 
-public class NewsApiResponse {
+public class NewsApiArticles {
     ArrayList<Article> articles;
 
     public ArrayList<Article> getResponse() {
