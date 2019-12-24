@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
@@ -36,6 +37,7 @@ public class ArticleSingle extends AppCompatActivity {
 
 //            webArticle = new ArticleScraper(url, webArticle).getArticle();
             webArticle.loadUrl(url);
+            Log.d("ARTICLE_URL", "ArticleSingle: " + url);
             /*webArticle.setWebViewClient(new WebViewClient(){
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

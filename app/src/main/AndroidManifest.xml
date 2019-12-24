@@ -11,7 +11,8 @@
         android:logo="@mipmap/news_getter_icon"
         android:roundIcon="@mipmap/news_getter_icon"
         android:supportsRtl="true"
-        android:theme="@style/SplashScreen">
+        android:theme="@style/SplashScreen"
+        android:usesCleartextTraffic="true">
         <activity android:name=".activities.SettingsActivity"></activity>
         <activity android:name=".ArticleSingle" />
         <activity android:name=".NewsTest" />

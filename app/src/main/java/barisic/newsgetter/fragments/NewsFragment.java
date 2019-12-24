@@ -1,6 +1,7 @@
 package barisic.newsgetter.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +43,13 @@ public class NewsFragment extends Fragment implements Callback<NewsApiArticles> 
     //MOVE LOGIC FROM CONSTRUCTOR (POTENTIAL CRASH)
     public NewsFragment(String domain){
 
-        if(domain == "jutarnji.hr"){
+        if(domain.equals("jutarnji.hr") || domain.equals("24sata.hr")){
             this.url = "everything?domains="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+            Log.d("JUTARNJI", "NewsFragment: " + domain);
         }
         else{
             this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+            Log.d("ELSE", "NewsFragment: " + domain);
         }
 //        this.url = "everything?domains="+ domain +"&pageSize=100&from="+ date +"&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
 //        this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
@@ -67,7 +70,7 @@ public class NewsFragment extends Fragment implements Callback<NewsApiArticles> 
         if(response.isSuccessful() && response != null){
             NewsApiArticles apiResponse = response.body();
             ArrayList<Article> articles = apiResponse.getResponse();
-
+            Log.d("SOURCE_ARTICLES", "onResponse: " + articles.size());
             initRecyclerView(getView(), articles);
         }
 

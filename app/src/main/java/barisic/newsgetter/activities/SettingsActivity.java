@@ -28,6 +28,7 @@ import barisic.newsgetter.helper_classes.ApiManager;
 import barisic.newsgetter.helper_classes.NewsApiArticles;
 import barisic.newsgetter.helper_classes.NewsApiSources;
 import barisic.newsgetter.helper_classes.Source;
+import barisic.newsgetter.interfaces.SourceSelectHandler;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -36,9 +37,16 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
 
 //    ProgressBar progressBar;
     String url = "sources?apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+    RecyclerView recyclerView;
     Button btnConfirm;
+
     ArrayList<String> namesList = new ArrayList<>();
     ArrayList<String> domainsList = new ArrayList<>();
+    ArrayList<String> urlsList = new ArrayList<>();
+
+    ArrayList<Integer> selectedSources = new ArrayList<>();
+    ArrayList<String> selectedNames = new ArrayList<>();
+    ArrayList<String> selectedDomains = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,10 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
         if(response.isSuccessful() && response != null){
             ArrayList<Source> sources = response.body().getSources();
 
+            namesList.add("Jutarnji List");
+            domainsList.add("jutarnji.hr");
+            urlsList.add("https://www.jutarnji.hr/");
+
             int i = 1;
             String domain;
             for (Source source: sources){
@@ -71,55 +83,15 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
                 }
                 domain = url.getHost();
 
-                namesList.add(source.getName());
-                domainsList.add(source.getSourceId());
-                Log.d("NEWS", "onResponse: " + source.getName() + " SOURCE_ID: ///"+ source.getSourceId() +"/// NO."+ i++);
+                if(!source.getSourceId().matches("google-news-(.*)")){
+                    namesList.add(source.getName());
+                    domainsList.add(source.getSourceId());
+                    urlsList.add(domain);
+                    Log.d("NEWS", "onResponse: " + source.getName() + " SOURCE_ID: ///"+ source.getSourceId() +"/// NO."+ i++);
+                }
             }
 
-            /*String domain;
-            int i = 1;
-            for (Source source: sources){
-                domain = source.getUrl();
-
-                URL url = null;
-                try {
-                    url = new URL(domain);
-                }catch (MalformedURLException e){
-                    Log.d("URL MALFORMED", "onResponse: " + e);
-                }
-                domain = url.getHost();
-
-                //FILTRIRANJE STRINGA DOMENE
-                if(domain.contains("www.")){
-                    domain = domain.replace("www.", "");
-                }
-                if(domain.substring(0, 5).matches("news[.]") && !domain.contains("com.au")){
-                    domain = domain.replace("news.", "");
-                }
-                if(domain.contains(".go")){
-                    domain = domain.replace(".go", "");
-                }
-
-                //PROVJERA DUPLIKATA U LISTI
-                if(!domainsList.contains(domain)){
-                    namesList.add(source.getName());
-                    domainsList.add(domain);
-                    Log.d("NEWS", "onResponse: " + domain + " source: " + source.getName() + " SOURCE_ID: ///"+ source.getSourceId() +"/// NO." + i);
-                    i++;
-                }
-            }*/
-            initRecyclerView(namesList, domainsList);
-
-            btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(v.getContext(), MainActivity.class);
-                    intent.putExtra("names", namesList);
-                    intent.putExtra("domains", domainsList);
-
-                    v.getContext().startActivity(intent);
-                }
-            });
+            initRecyclerView(namesList, domainsList, urlsList);
         }
     }
 
@@ -128,11 +100,33 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
         //
     }
 
-    public void initRecyclerView(ArrayList<String> names, ArrayList<String> domains){
-        RecyclerView recyclerView = findViewById(R.id.sources_recycler_view);
-        SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains);
+    public void initRecyclerView(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
+        recyclerView = findViewById(R.id.sources_recycler_view);
+        final SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains, urls);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
 
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
+
+
+                Log.d("TAAG", "onClick: " + adapter.getSelectedPositions());
+
+                selectedSources = adapter.getSelectedPositions();
+
+                for(Integer i : selectedSources){
+                    selectedNames.add(namesList.get(i));
+                    selectedDomains.add(domainsList.get(i));
+                }
+
+                intent.putExtra("names", selectedNames);
+                intent.putExtra("domains", selectedDomains);
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 }

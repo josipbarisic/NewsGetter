@@ -10,6 +10,9 @@
 
     <style name="SplashScreen" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="colorPrimary">@color/richBlack</item>
+        <item name="colorPrimaryDark">@color/eerieBlack</item>
+        <item name="colorAccent">@color/lightWhite</item>
     </style>
 
 </resources>

@@ -22,12 +22,6 @@ import barisic.newsgetter.fragments.NewsFragment;
 
 public class MainActivity extends AppCompatActivity{
 
-    /*Button oBtnHeadlines;
-    Button oBtnHome;
-    Button oSearchButton;
-    EditText etSearch;
-    String searchQuery;*/
-
     TabLayout tabLayout;
     ViewPager viewPager;
     ImageView imageView;
@@ -43,23 +37,39 @@ public class MainActivity extends AppCompatActivity{
         imageView = findViewById(R.id.imageView);
         viewPager= findViewById(R.id.viewPager);
 
+        ArrayList<String> names = new ArrayList<>();
+        ArrayList<String> domains = new ArrayList<>();
+        ArrayList<String> listedSources = new ArrayList<>();
+
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         Intent intent = getIntent();
+
+//        adapter.addFragment(new NewsFragment("jutarnji.hr"), "Jutarnji");
+
         if(intent.getExtras() != null){
             Log.d("MAIN_SOURCES", "onCreate: " + intent.getExtras().getStringArrayList("domains"));
-            ArrayList<String> names = intent.getExtras().getStringArrayList("names");
-            ArrayList<String> domains = intent.getExtras().getStringArrayList("domains");
-            for(String domain: domains){
-                adapter.addFragment(new NewsFragment(domain), names.get(domains.indexOf(domain)));
-            }
+
+            names = intent.getExtras().getStringArrayList("names");
+            domains = intent.getExtras().getStringArrayList("domains");
         }
 
-        adapter.addFragment(new NewsFragment("jutarnji.hr"), "Jutarnji");
-        /*adapter.addFragment(new NewsFragment("bbc.co.uk"), "BBC");
-        adapter.addFragment(new NewsFragment("nytimes.com"), "New York Times");
-        adapter.addFragment(new NewsFragment("elmundo.es"), "El Mundo");
-        adapter.addFragment(new NewsFragment("techcrunch.com"), "Techcrunch");*/
+        adapter.addFragment(new NewsFragment("bbc-news"), "BBC NEWS");
+        adapter.addFragment(new NewsFragment("the-new-york-times"), "New York Times");
+
+        for(int i = 0; i < adapter.getCount(); i++){
+            listedSources.add(adapter.getPageTitle(i));
+            Log.d("TITLE", "PAGE TITLE: " + adapter.getPageTitle(i));
+        }
+
+        if(names != null && domains != null){
+            for(int i = 0; i < domains.size(); i++){
+                Log.d("TITLE2", "NAME: " + names.get(i));
+                if(!listedSources.contains(names.get(i))){
+                    adapter.addFragment(new NewsFragment(domains.get(i)), names.get(i));
+                }
+            }
+        }
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -74,58 +84,10 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-
+//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
         });
-
-        /*oBtnHome = findViewById(R.id.homeButton);
-        oBtnHeadlines = findViewById(R.id.headlinesButton);
-        oSearchButton = findViewById(R.id.searchButton);
-        etSearch = findViewById(R.id.etSearch);
-
-        oBtnHeadlines.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NewsTest.class);
-                url = "top-headlines?language=en&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-                i.putExtra("url", url);
-
-                startActivity(i);
-            }
-        });
-
-        oBtnHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, NewsTest.class);
-                //url = "everything?q=&domains=24sata.hr,jutarnji.hr&pageSize=100&from=" + date + "&sortBy=publishedAt&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-                url = "everything?q=&domains=jutarnji.hr&pageSize=100&from=" + "&sortBy=publishedAt&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-                i.putExtra("url", url);
-
-                startActivity(i);
-            }
-        });
-
-
-        oSearchButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchQuery = etSearch.getText().toString();
-
-                if(!searchQuery.matches("")){
-                    Intent i = new Intent(MainActivity.this, NewsTest.class);
-                    url = "everything?q="+ searchQuery +"&language=en&pageSize=100&from="+ date +"&sortBy=publishedAt&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-                    i.putExtra("url", url);
-
-                    startActivity(i);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), getText(R.string.search_warning).toString(), Toast.LENGTH_LONG).show();
-                }
-            }
-        });*/
-
     }
 
     private void setLocale(String lang){

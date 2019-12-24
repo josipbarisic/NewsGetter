@@ -142,7 +142,6 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         LinearLayout dislikeContainer;
         LinearLayout shareContainer;
 
-        String articleImageUrl;
         String articleUrl;
 
         public CustomViewHolder(@NonNull View itemView, int viewType){
