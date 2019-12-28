@@ -1,8 +1,8 @@
-package barisic.newsgetter.helper_classes;
-
-import androidx.annotation.NonNull;
+package barisic.newsgetter.news_api_classes;
 
 import java.util.ArrayList;
+
+import barisic.newsgetter.news_api_classes.Article;
 
 
 public class NewsApiArticles {

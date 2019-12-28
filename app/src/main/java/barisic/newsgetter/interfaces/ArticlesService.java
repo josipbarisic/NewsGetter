@@ -1,6 +1,6 @@
 package barisic.newsgetter.interfaces;
 
-import barisic.newsgetter.helper_classes.NewsApiArticles;
+import barisic.newsgetter.news_api_classes.NewsApiArticles;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Url;

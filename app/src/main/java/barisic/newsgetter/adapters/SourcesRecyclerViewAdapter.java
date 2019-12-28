@@ -11,33 +11,41 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import barisic.newsgetter.R;
-import barisic.newsgetter.interfaces.SourceSelectHandler;
+import barisic.newsgetter.db_classes.Source;
 
 public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     ArrayList<String> namesDataset;
     ArrayList<String> domainsDataset;
     ArrayList<String> urlsDataset;
+    List<Source> sourcesDataset;
 
     ArrayList<Integer> selectedPositions = new ArrayList<>();
 
     final String logoScraper = "https://logo.clearbit.com/";
+    CustomViewHolder viewHolder = null;
 
-    public SourcesRecyclerViewAdapter(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
+    public SourcesRecyclerViewAdapter(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls, List<Source> sources){
         this.namesDataset = names;
         this.domainsDataset = domains;
         this.urlsDataset = urls;
+        this.sourcesDataset = sources;
     }
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sources_list_item, parent, false);
-        final CustomViewHolder viewHolder = new CustomViewHolder(view);
+        viewHolder = new CustomViewHolder(view);
 
         return viewHolder;
     }
@@ -46,6 +54,7 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
         String url = urlsDataset.get(position);
+        checkSelectedSources(sourcesDataset, viewHolder);
 
         if(!url.matches("")){
             Picasso.get().load(logoScraper + url).into(viewHolder.unselectedImageView);
@@ -59,7 +68,9 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.unselectedLayout){
                     viewHolder.viewSwitcher.showNext();
 
-                    selectedPositions.add(viewHolder.getAdapterPosition());
+                    if(!selectedPositions.isEmpty() && !selectedPositions.contains(viewHolder.getAdapterPosition())){
+                        selectedPositions.add(viewHolder.getAdapterPosition());
+                    }
                 }
                 else{
                     viewHolder.viewSwitcher.showPrevious();
@@ -89,6 +100,20 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public ArrayList<Integer> getSelectedPositions(){
         return selectedPositions;
+    }
+
+    public void checkSelectedSources(List<Source> sources, CustomViewHolder viewHolder){
+        for(String domain: domainsDataset){
+            for (Source source: sources){
+                if(domain.matches(source.getDomain())){
+
+                    if(!selectedPositions.contains(viewHolder.getAdapterPosition())){
+                        viewHolder.viewSwitcher.showNext();
+                        selectedPositions.add(viewHolder.getAdapterPosition());
+                    }
+                }
+            }
+        }
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {

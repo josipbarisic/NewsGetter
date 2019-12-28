@@ -1,8 +1,6 @@
 package barisic.newsgetter.adapters;
 
 import android.content.Intent;
-import android.net.Uri;
-import android.telecom.Call;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,7 @@ import java.util.List;
 
 import barisic.newsgetter.ArticleSingle;
 import barisic.newsgetter.R;
-import barisic.newsgetter.helper_classes.Article;
+import barisic.newsgetter.news_api_classes.Article;
 
 public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<Article> dataset;

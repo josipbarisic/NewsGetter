@@ -1,4 +1,4 @@
-package barisic.newsgetter.helper_classes;
+package barisic.newsgetter.news_api_classes;
 
 public class Source {
     String name;

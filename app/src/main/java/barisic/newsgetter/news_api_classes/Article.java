@@ -1,4 +1,4 @@
-package barisic.newsgetter.helper_classes;
+package barisic.newsgetter.news_api_classes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

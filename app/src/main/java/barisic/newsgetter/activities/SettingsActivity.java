@@ -1,34 +1,29 @@
 package barisic.newsgetter.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 
-import com.squareup.picasso.Picasso;
-
-import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import barisic.newsgetter.MainActivity;
 import barisic.newsgetter.R;
 import barisic.newsgetter.adapters.SourcesRecyclerViewAdapter;
 import barisic.newsgetter.helper_classes.ApiManager;
-import barisic.newsgetter.helper_classes.NewsApiArticles;
-import barisic.newsgetter.helper_classes.NewsApiSources;
-import barisic.newsgetter.helper_classes.Source;
-import barisic.newsgetter.interfaces.SourceSelectHandler;
+import barisic.newsgetter.helper_classes.SourceViewModel;
+import barisic.newsgetter.news_api_classes.NewsApiSources;
+import barisic.newsgetter.news_api_classes.Source;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,6 +43,8 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
     ArrayList<String> selectedNames = new ArrayList<>();
     ArrayList<String> selectedDomains = new ArrayList<>();
 
+    private SourceViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
 
         ApiManager.getInstance().getSourcesService().getApiSources(url).enqueue(this);
 
+        viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
     }
 
     @Override
@@ -92,6 +90,7 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
             }
 
             initRecyclerView(namesList, domainsList, urlsList);
+
         }
     }
 
@@ -102,13 +101,25 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
 
     public void initRecyclerView(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
         recyclerView = findViewById(R.id.sources_recycler_view);
-        final SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains, urls);
+        final SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains, urls, viewModel.getAllSources());
+
+//        adapter.checkSelectedSources(viewModel.getAllSources());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+
+        viewModel.getSourcesUpdate().observe(this, new Observer<List<barisic.newsgetter.db_classes.Source>>() {
+            @Override
+            public void onChanged(List<barisic.newsgetter.db_classes.Source> sources) {
+//                adapter.checkSelectedSources(viewModel.getAllSources());
+                Log.d("LISTNOW", "onChanged: " + sources.toString());
+            }
+
+        });
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent intent = new Intent(v.getContext(), MainActivity.class);
 
 
@@ -116,13 +127,21 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
 
                 selectedSources = adapter.getSelectedPositions();
 
-                for(Integer i : selectedSources){
-                    selectedNames.add(namesList.get(i));
-                    selectedDomains.add(domainsList.get(i));
+                for(Integer n : selectedSources){
+                    /*selectedNames.add(namesList.get(n));
+                    selectedDomains.add(domainsList.get(n));*/
+                    barisic.newsgetter.db_classes.Source source = new barisic.newsgetter.db_classes.Source(namesList.get(n), domainsList.get(n));
+
+                    viewModel.insertSource(source);
+                    /*for(int i = 0; i < adapter.getItemCount(); i++){
+                        if(adapter.getItemId(i) != n){
+                            viewModel.deleteSource();
+                        }
+                    }*/
                 }
 
-                intent.putExtra("names", selectedNames);
-                intent.putExtra("domains", selectedDomains);
+                /*intent.putExtra("names", selectedNames);
+                intent.putExtra("domains", selectedDomains);*/
 
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 v.getContext().startActivity(intent);

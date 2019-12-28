@@ -3,6 +3,7 @@
     package="barisic.newsgetter">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
     <application
         android:allowBackup="true"
@@ -13,16 +14,17 @@
         android:supportsRtl="true"
         android:theme="@style/SplashScreen"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.SettingsActivity"></activity>
-        <activity android:name=".ArticleSingle" />
-        <activity android:name=".NewsTest" />
         <activity android:name=".MainActivity" android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.VIEW"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.SettingsActivity"/>
+        <activity android:name=".ArticleSingle" />
+        <activity android:name=".NewsTest" />
     </application>
 
 </manifest>
