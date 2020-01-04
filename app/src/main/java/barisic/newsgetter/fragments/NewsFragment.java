@@ -30,6 +30,7 @@ import retrofit2.Response;
 public class NewsFragment extends Fragment implements Callback<NewsApiArticles> {
 
     String url;
+    static String domain;
 
     //datum za url parametar from (OVERCOMPLICATED)
     DateFormat dfy = new SimpleDateFormat("yyyy");
@@ -41,18 +42,25 @@ public class NewsFragment extends Fragment implements Callback<NewsApiArticles> 
     String date = dfy.format(oDate) + "-" + dfm.format(oDate) + "-" + day;
 
     //MOVE LOGIC FROM CONSTRUCTOR (POTENTIAL CRASH)
-    public NewsFragment(String domain){
+    public NewsFragment(){
+
+//        this.url = "everything?domains="+ domain +"&pageSize=100&from="+ date +"&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+//        this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+    }
+
+    public static NewsFragment newInstance(String fragmentDomain){
+        domain = fragmentDomain;
+        NewsFragment fragment = new NewsFragment();
 
         if(domain.equals("jutarnji.hr") || domain.equals("24sata.hr")){
-            this.url = "everything?domains="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+            fragment.url = "everything?domains="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
             Log.d("JUTARNJI", "NewsFragment: " + domain);
         }
         else{
-            this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+            fragment.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
             Log.d("ELSE", "NewsFragment: " + domain);
         }
-//        this.url = "everything?domains="+ domain +"&pageSize=100&from="+ date +"&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-//        this.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+        return fragment;
     }
 
     @Nullable
@@ -71,7 +79,11 @@ public class NewsFragment extends Fragment implements Callback<NewsApiArticles> 
             NewsApiArticles apiResponse = response.body();
             ArrayList<Article> articles = apiResponse.getResponse();
             Log.d("SOURCE_ARTICLES", "onResponse: " + articles.size());
-            initRecyclerView(getView(), articles);
+
+            View view = getView();
+            if(view != null){
+                initRecyclerView(view, articles);
+            }
         }
 
     }
@@ -82,7 +94,7 @@ public class NewsFragment extends Fragment implements Callback<NewsApiArticles> 
     }
 
     private void initRecyclerView(View view, ArrayList<Article> articles){
-        final RecyclerView recyclerView = view.findViewById(R.id.news_recycler_view);
+        RecyclerView recyclerView = view.findViewById(R.id.news_recycler_view);
         ArticlesRecyclerViewAdapter adapter = new ArticlesRecyclerViewAdapter(articles);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

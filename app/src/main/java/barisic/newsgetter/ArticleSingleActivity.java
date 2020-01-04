@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import barisic.newsgetter.helper_classes.ArticleScraper;
 
-public class ArticleSingle extends AppCompatActivity {
+public class ArticleSingleActivity extends AppCompatActivity {
 
     WebView webArticle;
     Button browseButton;
@@ -37,7 +37,7 @@ public class ArticleSingle extends AppCompatActivity {
 
 //            webArticle = new ArticleScraper(url, webArticle).getArticle();
             webArticle.loadUrl(url);
-            Log.d("ARTICLE_URL", "ArticleSingle: " + url);
+            Log.d("ARTICLE_URL", "ArticleSingleActivity: " + url);
             /*webArticle.setWebViewClient(new WebViewClient(){
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {

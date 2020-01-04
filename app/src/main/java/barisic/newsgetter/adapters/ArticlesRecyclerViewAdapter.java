@@ -20,7 +20,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import barisic.newsgetter.ArticleSingle;
+import barisic.newsgetter.ArticleSingleActivity;
 import barisic.newsgetter.R;
 import barisic.newsgetter.news_api_classes.Article;
 
@@ -41,12 +41,7 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         viewHolder.articleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Otvori clanak u browseru
-                /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(viewHolder.articleUrl));
-                v.getContext().startActivity(browserIntent);*/
-
-                //Otvori clanak u article single-u
-                Intent intent = new Intent(v.getContext(), ArticleSingle.class);
+                Intent intent = new Intent(v.getContext(), ArticleSingleActivity.class);
                 intent.putExtra("url", viewHolder.articleUrl);
 
                 v.getContext().startActivity(intent);
@@ -120,7 +115,6 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         else if(!vhPosition.isEmpty() && vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
             viewHolder.viewSwitcher.showNext();
         }
-        Log.d("BINDER", "onBindViewHolder: " + viewHolder.getAdapterPosition());
         //-----------------------------------------------------
     }
 

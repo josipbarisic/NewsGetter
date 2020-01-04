@@ -11,9 +11,6 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
@@ -25,10 +22,10 @@ import barisic.newsgetter.R;
 import barisic.newsgetter.db_classes.Source;
 
 public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<String> namesDataset;
-    ArrayList<String> domainsDataset;
-    ArrayList<String> urlsDataset;
-    List<Source> sourcesDataset;
+    private ArrayList<String> namesDataset;
+    private ArrayList<String> domainsDataset;
+    private ArrayList<String> urlsDataset;
+    private List<Source> sourcesDataset;
 
     ArrayList<Integer> selectedPositions = new ArrayList<>();
 
@@ -54,7 +51,10 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
         String url = urlsDataset.get(position);
-        checkSelectedSources(sourcesDataset, viewHolder);
+
+        checkSelectedSources(sourcesDataset);
+
+        Log.d("CHECKER", "checkSelectedSources: " + selectedPositions.toString());
 
         if(!url.matches("")){
             Picasso.get().load(logoScraper + url).into(viewHolder.unselectedImageView);
@@ -65,19 +65,28 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             @Override
             @TargetApi(16)
             public void onClick(View v) {
-                if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.unselectedLayout){
+                if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.unselectedLayout && !selectedPositions.contains(viewHolder.getAdapterPosition())){
                     viewHolder.viewSwitcher.showNext();
 
-                    if(!selectedPositions.isEmpty() && !selectedPositions.contains(viewHolder.getAdapterPosition())){
-                        selectedPositions.add(viewHolder.getAdapterPosition());
-                    }
+                    selectedPositions.add(viewHolder.getAdapterPosition());
                 }
                 else{
                     viewHolder.viewSwitcher.showPrevious();
 
                     selectedPositions.remove((Integer) viewHolder.getAdapterPosition());
+
+                    for (Source source: sourcesDataset){
+                        if(source.getDomain().matches(domainsDataset.get(viewHolder.getAdapterPosition()))){
+                            Log.d("UNSELECTED", "onClick: " + source.getName());
+                            sourcesDataset.remove(source);
+
+                            //break to prevent crash because of dataset change while in for loop
+                            break;
+                        }
+                    }
                 }
                 Log.d("SELECTED_POSNS", "Sources onClick: " + selectedPositions);
+
             }
         });
 
@@ -89,7 +98,7 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         viewHolder.tvUnselectedSourceName.setText(namesDataset.get(position));
-        Log.d("binder", "onBindViewHolder: " + viewHolder.tvUnselectedSourceName.getText());
+
         viewHolder.tvSelectedSourceName.setText(namesDataset.get(position));
     }
 
@@ -102,14 +111,12 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         return selectedPositions;
     }
 
-    public void checkSelectedSources(List<Source> sources, CustomViewHolder viewHolder){
-        for(String domain: domainsDataset){
-            for (Source source: sources){
+    public void checkSelectedSources(List<Source> sources){
+        for(Source source: sources){
+            for (String domain: domainsDataset){
                 if(domain.matches(source.getDomain())){
-
-                    if(!selectedPositions.contains(viewHolder.getAdapterPosition())){
-                        viewHolder.viewSwitcher.showNext();
-                        selectedPositions.add(viewHolder.getAdapterPosition());
+                    if(!selectedPositions.contains(domainsDataset.indexOf(domain))){
+                        selectedPositions.add(domainsDataset.indexOf(domain));
                     }
                 }
             }

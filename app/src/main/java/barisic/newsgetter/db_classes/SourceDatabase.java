@@ -6,6 +6,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
+import barisic.newsgetter.interfaces.SourceDAO;
+
 @Database(version = 1, entities = Source.class)
 public abstract class SourceDatabase extends RoomDatabase {
 

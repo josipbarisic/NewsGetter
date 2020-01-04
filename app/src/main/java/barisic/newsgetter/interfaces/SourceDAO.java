@@ -1,4 +1,4 @@
-package barisic.newsgetter.db_classes;
+package barisic.newsgetter.interfaces;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -8,6 +8,8 @@ import androidx.room.Query;
 import androidx.room.Update;
 
 import java.util.List;
+
+import barisic.newsgetter.db_classes.Source;
 
 @Dao
 public interface SourceDAO {
@@ -29,7 +31,4 @@ public interface SourceDAO {
 
     @Query("SELECT * FROM sources_table ORDER BY id DESC")
     List<Source> getAllSources();
-
-    @Query("SELECT * FROM sources_table WHERE domain = :domain LIMIT 1")
-    boolean checkSources(String domain);
 }

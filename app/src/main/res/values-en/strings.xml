@@ -9,6 +9,7 @@
     <string name="like_text">Like</string>
     <string name="dislike_text">Dislike</string>
     <string name="share_text">Share</string>
+    <string name="no_sources_warning">You don\'t have any news sources!\n\nPlease select at least one source.</string>
     <string name="browse_button">Open in web browser</string>
     <string name="choose_source">Select sources</string>
     <string name="confirm_sources">Confirm</string>

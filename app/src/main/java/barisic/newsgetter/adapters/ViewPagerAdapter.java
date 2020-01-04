@@ -17,8 +17,8 @@ import barisic.newsgetter.fragments.NewsFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
-    List<Fragment> fragmentList = new ArrayList<>();
-    List<String> fragmentListTitles = new ArrayList<>();
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private List<String> fragmentListTitles = new ArrayList<>();
 
     public ViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -41,10 +41,20 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         return fragmentListTitles.get(position);
     }
 
+    public List<Fragment> getFragmentList(){
+        return fragmentList;
+    }
+
     public void resetFragments(List<Source> sources){
         removeAllFragments();
+        notifyDataSetChanged();
+
+        if(sources == null){
+            return;
+        }
+
         for (Source source : sources){
-            addFragment(new NewsFragment(source.getDomain()), source.getName());
+            addFragment(NewsFragment.newInstance(source.getDomain()), source.getName());
         }
         notifyDataSetChanged();
     }

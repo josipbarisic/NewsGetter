@@ -32,13 +32,13 @@ public class SourceViewModel extends AndroidViewModel {
     public void deleteSource(Source source){
         repository.deleteSource(source);
     }
-    public boolean checkSources(String domain){
-        return repository.checkSources(domain);
-    }
     public LiveData<List<Source>> getSourcesUpdate(){
         return sourcesUpdate;
     }
     public List<Source> getAllSources(){
         return allSources;
     }
+    public void deleteAllSources(){
+        repository.deleteAll();
+    };
 }

@@ -1,6 +1,7 @@
 package barisic.newsgetter;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
@@ -42,67 +44,32 @@ public class MainActivity extends AppCompatActivity{
         imageView = findViewById(R.id.imageView);
         viewPager= findViewById(R.id.viewPager);
 
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<String> domains = new ArrayList<>();
-        ArrayList<String> listedSources = new ArrayList<>();
-        List<Source> sources = new ArrayList<>();
-
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
         sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
         sourceViewModel.getSourcesUpdate().observe(this, new Observer<List<Source>>() {
             @Override
             public void onChanged(List<Source> sources) {
+                //POSTAVLJANJE FRAGMENATA U ViewPagerAdapter
                 adapter.resetFragments(sources);
-                Log.d("LISTNOW", "onChanged: " + sources.toString());
+
+                if(adapter.getCount() == 0){
+                    imageView.performClick();
+                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
+                }
             }
         });
 
-        Log.d("db", "onCreate: " + getApplicationContext().getDatabasePath("source_database"));
-
-//        Intent intent = getIntent();
-
-//        adapter.addFragment(new NewsFragment("jutarnji.hr"), "Jutarnji");
-
-//        if(intent.getExtras() != null){
-//            Log.d("MAIN_SOURCES", "onCreate: " + intent.getExtras().getStringArrayList("domains"));
-//
-//            names = intent.getExtras().getStringArrayList("names");
-//            domains = intent.getExtras().getStringArrayList("domains");
-//        }
-
-//        adapter.addFragment(new NewsFragment("bbc-news"), "BBC NEWS");
-//        adapter.addFragment(new NewsFragment("the-new-york-times"), "New York Times");
-
-//        for(int i = 0; i < adapter.getCount(); i++){
-////            listedSources.add(adapter.getPageTitle(i));
-////            Log.d("TITLE", "PAGE TITLE: " + adapter.getPageTitle(i));
-////        }
-
-
-//        if(names != null && domains != null){
-//            for(int i = 0; i < domains.size(); i++){
-//                Log.d("TITLE2", "NAME: " + names.get(i));
-//                if(!listedSources.contains(names.get(i))){
-//                    adapter.addFragment(new NewsFragment(domains.get(i)), names.get(i));
-//                }
-//            }
-//        }
+//        Log.d("db", "onCreate: " + getApplicationContext().getDatabasePath("source_database").getAbsoluteFile());
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
-        //USE ASYNC TASK TO LOAD IMAGE
-        for (int i = 0; i < adapter.getCount(); i++){
-            Log.d("TAG", "onCreate: ");
-        }
-//        tabLayout.getTabAt(0).set
 
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-//                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
                 startActivity(intent);
             }
         });
