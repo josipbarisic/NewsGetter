@@ -14,22 +14,38 @@ import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import barisic.newsgetter.ArticleSingleActivity;
+import barisic.newsgetter.activities.ArticleSingleActivity;
 import barisic.newsgetter.R;
+import barisic.newsgetter.db_classes.Favorite;
+import barisic.newsgetter.helper_classes.FavoriteViewModel;
 import barisic.newsgetter.news_api_classes.Article;
 
 public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    List<Article> dataset;
-    ArrayList<Integer> vhPosition = new ArrayList<>();
+    private List<Article> dataset;
+    private ArrayList<Integer> vhPosition = new ArrayList<>();
 
-    public ArticlesRecyclerViewAdapter(List<Article> list){
+    private FavoriteViewModel favoriteViewModel;
+    private String fragmentName;
+    private LifecycleOwner lifecycleOwner;
+
+    private int current_position;
+    private Article article = null;
+    private Favorite favorite = null;
+
+    public ArticlesRecyclerViewAdapter(List<Article> list, FavoriteViewModel viewModel, String fragment, LifecycleOwner owner){
         dataset = list;
+        favoriteViewModel = viewModel;
+        fragmentName = fragment;
+        lifecycleOwner = owner;
     }
 
     @NonNull
@@ -64,6 +80,8 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         });
 
+
+
         final Animation inAnimation = AnimationUtils.loadAnimation(view.getContext(), android.R.anim.slide_in_left);
         final Animation outAnimation = AnimationUtils.loadAnimation(view.getContext(), R.anim.slide_out_left);
 
@@ -75,18 +93,27 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             @Override
             public void onClick(View v) {
 
+                if(dataset != null){
+                    article = dataset.get(viewHolder.getAdapterPosition());
+
+                    favorite = new Favorite(article.getTitle(), article.getArticleUrl(), article.getImageUrl(), article.getDescription(), article.getDate());
+                }
+
                 if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
+                    favoriteViewModel.insertFavorite(favorite);
 
-                    viewHolder.viewSwitcher.showNext();
-
-                    vhPosition.add(viewHolder.getAdapterPosition());
                     Log.d("LIKED_ID", "onClick: " + viewHolder.getLayoutPosition());
-                    Log.d("ARRAYLIST", "onClick: " + vhPosition.toString());
+                    notifyDataSetChanged();
 
-                }else{
-                    viewHolder.viewSwitcher.showPrevious();
-                    vhPosition.remove((Integer)viewHolder.getAdapterPosition());
-                    Log.d("ARRAYLIST", "onClick: " + vhPosition.toString());
+                }
+                else{
+                    favoriteViewModel.deleteFavorite(favorite.getUrl());
+
+                    if(fragmentName.equals("FavoritesFragment")){
+                        dataset.remove(article);
+                    }
+                    Log.d("DISLIKED_ID", "onClick: " + viewHolder.getAdapterPosition());
+                    notifyDataSetChanged();
                 }
             }
         });
@@ -99,23 +126,50 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
         String imageUrl = dataset.get(position).getImageUrl();
 
-        viewHolder.tvDate.setText(dataset.get(position).getDate());
+        if(fragmentName.equals("FavoritesFragment")){
+            viewHolder.tvDate.setText(dataset.get(position).getPublishedAt());
+        }
+        else{
+            viewHolder.tvDate.setText(dataset.get(position).getDate());
+        }
+
         viewHolder.tvTitle.setText(dataset.get(position).getTitle());
         viewHolder.articleUrl = dataset.get(position).getArticleUrl();
         viewHolder.articleDescription.setText(dataset.get(position).getDescription());
         //Postavljanje slike u ImageView s Picasso library-em
         if(imageUrl != null && !imageUrl.matches("")){
-            Picasso.get().load(imageUrl).into(viewHolder.articleImage);
+            Picasso.get().load(imageUrl).resize(1280, 720).onlyScaleDown().into(viewHolder.articleImage);
         }
 
-        //Provjera pozicije clanka (u adapteru) i postavljanje buttona u like ili dislike drawable kod RecyclerView elemenata
-        if(!vhPosition.isEmpty() && !vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
-            viewHolder.viewSwitcher.showPrevious();
-        }
-        else if(!vhPosition.isEmpty() && vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
-            viewHolder.viewSwitcher.showNext();
-        }
-        //-----------------------------------------------------
+        favoriteViewModel.getAllFavorites().observe(lifecycleOwner, new Observer<List<Favorite>>() {
+            @Override
+            public void onChanged(List<Favorite> favorites) {
+                vhPosition.clear();
+                if(favorites != null){
+                    for(Favorite favorite: favorites){
+                        if(viewHolder.articleUrl.equals(favorite.getUrl())){
+                            vhPosition.add(viewHolder.getAdapterPosition());
+
+                            Log.d("Articles_adapter", "ADD position vhArray:" + vhPosition.toString());
+                        }
+                    }
+                }
+                //Provjera pozicije clanka (u adapteru) i postavljanje buttona u like ili dislike drawable kod RecyclerView elemenata
+                if(!vhPosition.isEmpty() && !vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
+                    viewHolder.viewSwitcher.showPrevious();
+                    Log.d("ARTICLE_DISLIKER", "onBindViewHolder: DISLIKING");
+                }
+                else if(!vhPosition.isEmpty() && vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
+                    viewHolder.viewSwitcher.showNext();
+                    Log.d("ARTICLE_LIKER", "onBindViewHolder: LIKING");
+                }
+                else if(vhPosition.isEmpty() && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
+                    viewHolder.viewSwitcher.showPrevious();
+                    Log.d("ARTICLE_DISLIKER", "onBindViewHolder: DISLIKING");
+                }
+                //-----------------------------------------------------
+            }
+        });
     }
 
     @Override

@@ -1,8 +1,9 @@
 <resources>
+    <string name="apiKey">38fbf5c450684e339b0e300b7bd7f8ea</string>
+
     <string name="app_name">News Getter</string>
     <string name="headlines_button">Naslovnice</string>
     <string name="home_button">Vijesti iz Hrvatske</string>
-    <string name="search_hint">Pretraži vijesti</string>
     <string name="search_button">Pretraži</string>
     <string name="search_warning">Unesite pojam za pretragu!</string>
     <string name="like_text">Sviđa mi se</string>
@@ -12,4 +13,18 @@
     <string name="browse_button">Otvori u web pregledniku</string>
     <string name="choose_source">Odaberite izvore</string>
     <string name="confirm_sources">Potvrdi</string>
+
+    <string name="my_news_item">Moje Vijesti</string>
+    <string name="sources_item">Izvori</string>
+    <string name="search_item">Pretraži</string>
+    <string name="favorites_item">Favoriti</string>
+    <string name="select_all_text">Označi sve</string>
+    <string name="unselect_all_text">Odznači sve</string>
+
+    <string name="search_hint">Pretraži vijesti...</string>
+    <string name="recommended_text">Preporučene vijesti</string>
+    <string name="results_text">Rezultati pretrage</string>
+
+    <string name="newsapi_attribution">Pokreće NewsAPI.org</string>
+
 </resources>

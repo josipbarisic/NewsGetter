@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,13 +30,15 @@ public class MainActivity extends AppCompatActivity{
     ViewPager viewPager;
     ImageView imageView;
 
+    private static final String TAG = "MAIN_ACT";
+
     private SourceViewModel sourceViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        //setLocale("hr");
+        setLocale("hr");
         setContentView(R.layout.activity_main);
 
         tabLayout = findViewById(R.id.tabLayout);
@@ -54,13 +55,18 @@ public class MainActivity extends AppCompatActivity{
                 adapter.resetFragments(sources);
 
                 if(adapter.getCount() == 0){
-                    imageView.performClick();
-                    Toast.makeText(MainActivity.this, getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+//                    startActivity(intent);
+//                    finish();
+
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-//        Log.d("db", "onCreate: " + getApplicationContext().getDatabasePath("source_database").getAbsoluteFile());
+        Log.d(TAG, "onCreate: " + adapter.getCount());
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

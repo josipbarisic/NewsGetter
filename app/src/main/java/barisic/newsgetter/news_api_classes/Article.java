@@ -12,6 +12,26 @@ public class Article {
     String description;
     String publishedAt;
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setUrlToImage(String urlToImage) {
+        this.urlToImage = urlToImage;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPublishedAt(String publishedAt) {
+        this.publishedAt = publishedAt;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -41,5 +61,9 @@ public class Article {
         date = day +"/"+ month +"/"+ year +"   "+ hours +":"+ minutes +" GMT";
 
         return date;
+    }
+
+    public String getPublishedAt() {
+        return publishedAt;
     }
 }

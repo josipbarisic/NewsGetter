@@ -4,14 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ArticleSingleActivity">
+    tools:context=".activities.ArticleSingleActivity">
 
     <WebView
-        android:id="@+id/tvArticleText"
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="@+id/browseButton"/>
+        app:layout_constraintBottom_toBottomOf="@+id/browseButton" />
 
     <Button
         android:id="@+id/browseButton"
@@ -20,6 +20,7 @@
         android:background="@drawable/like_drawable"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/browse_button"
-        android:textSize="15dp" />
+        android:textColor="@color/heavyWhite"
+        android:textSize="15sp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="apiKey">38fbf5c450684e339b0e300b7bd7f8ea</string>
+
     <string name="app_name">News Getter</string>
     <string name="headlines_button">Headlines</string>
     <string name="home_button">News from Croatia</string>
-    <string name="search_hint">Search news</string>
     <string name="search_button">Search</string>
     <string name="search_warning">Please enter search query!</string>
     <string name="like_text">Like</string>
@@ -13,4 +14,17 @@
     <string name="browse_button">Open in web browser</string>
     <string name="choose_source">Select sources</string>
     <string name="confirm_sources">Confirm</string>
+
+    <string name="my_news_item">My News</string>
+    <string name="sources_item">Sources</string>
+    <string name="search_item">Search</string>
+    <string name="favorites_item">Favorites</string>
+    <string name="select_all_text">Select all</string>
+    <string name="unselect_all_text">Unselect all</string>
+
+    <string name="search_hint">Search the News&#8230;</string>
+    <string name="recommended_text">Recommended News</string>
+    <string name="results_text">Search results</string>
+
+    <string name="newsapi_attribution">Powered by NewsAPI.org</string>
 </resources>

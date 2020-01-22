@@ -1,23 +1,27 @@
-package barisic.newsgetter.activities;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package barisic.newsgetter.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-import barisic.newsgetter.MainActivity;
 import barisic.newsgetter.R;
 import barisic.newsgetter.TestActivity;
 import barisic.newsgetter.adapters.SourcesRecyclerViewAdapter;
@@ -29,27 +33,31 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SettingsActivity extends AppCompatActivity implements Callback<NewsApiSources> {
+public class SettingsFragment extends Fragment implements Callback<NewsApiSources> {
 
-//    ProgressBar progressBar;
-    String url = "sources?apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-    RecyclerView recyclerView;
-    Button btnConfirm;
+    private String url = "sources?apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+    private RecyclerView recyclerView;
+    private Button btnConfirm;
+    private Button btnSelectUnselectAll;
 
-    ArrayList<String> namesList = new ArrayList<>();
-    ArrayList<String> domainsList = new ArrayList<>();
-    ArrayList<String> urlsList = new ArrayList<>();
-
-    ArrayList<Integer> selectedSources = new ArrayList<>();
+    private ArrayList<String> namesList = new ArrayList<>();
+    private ArrayList<String> domainsList = new ArrayList<>();
+    private ArrayList<String> urlsList = new ArrayList<>();
+    private ArrayList<Integer> selectedSources = new ArrayList<>();
 
     private SourceViewModel viewModel;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+    public static SettingsFragment newInstance(){
+        return new SettingsFragment();
+    }
 
-        btnConfirm = findViewById(R.id.btnSelectSources);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        btnConfirm = view.findViewById(R.id.btnSelectSources);
+//        btnSelectUnselectAll = view.findViewById(R.id.btnSelectUnselectAll);
 
         /*progressBar = findViewById(R.id.progressBar);
 
@@ -58,24 +66,14 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
         ApiManager.getInstance().getSourcesService().getApiSources(url).enqueue(this);
 
         viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
-        /*viewModel.getSourcesUpdate().observe(this, new Observer<List<barisic.newsgetter.db_classes.Source>>() {
-            @Override
-            public void onChanged(List<barisic.newsgetter.db_classes.Source> sources) {
-                for(barisic.newsgetter.db_classes.Source source: sources){
-                    Log.d("LISTNOW", "onChanged: " + source.getName());
-                }
-            }
-        });*/
+
+        return view;
     }
 
     @Override
-    public void onResponse(Call<NewsApiSources> call, Response<NewsApiSources> response) {
-        if(response.isSuccessful() && response != null){
+    public void onResponse(@NonNull Call<NewsApiSources> call, Response<NewsApiSources> response) {
+        if(response.isSuccessful()){
             ArrayList<Source> sources = response.body().getSources();
-
-            namesList.add("Jutarnji List");
-            domainsList.add("jutarnji.hr");
-            urlsList.add("https://www.jutarnji.hr/");
 
             namesList.add("24sata");
             domainsList.add("24sata.hr");
@@ -93,6 +91,11 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
                 domain = url.getHost();
 
                 if(!source.getSourceId().matches("google-news-(.*)")){
+                    if(source.getSourceId().equals("la-gaceta")){
+                        namesList.add("Jutarnji List");
+                        domainsList.add("jutarnji.hr");
+                        urlsList.add("https://www.jutarnji.hr/");
+                    }
                     namesList.add(source.getName());
                     domainsList.add(source.getSourceId());
                     urlsList.add(domain);
@@ -100,30 +103,36 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
                 }
             }
 
-            initRecyclerView(namesList, domainsList, urlsList);
+            initRecyclerView(getView(), namesList, domainsList, urlsList);
         }
     }
 
     @Override
     public void onFailure(Call<NewsApiSources> call, Throwable t) {
-        //
+
     }
 
-    public void initRecyclerView(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
-        recyclerView = findViewById(R.id.sources_recycler_view);
+    public void initRecyclerView(View view, ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
+        recyclerView = view.findViewById(R.id.sources_recycler_view);
         final SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains, urls, viewModel.getAllSources());
 
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-//        viewModel.getSourcesUpdate().observe(this, new Observer<List<barisic.newsgetter.db_classes.Source>>() {
-//            @Override
-//            public void onChanged(List<barisic.newsgetter.db_classes.Source> sources) {
-////                adapter.checkSelectedSources(viewModel.getAllSources());
-//                Log.d("LISTNOW", "onChanged: " + sources.toString());
-//            }
-//
-//        });
+        /*btnSelectUnselectAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectedSources = adapter.getSelectedPositions();
+                if(selectedSources.isEmpty()){
+                    adapter.setSelectedPositions("all");
+                    btnSelectUnselectAll.setText(R.string.unselect_all_text);
+                }
+                else{
+                    adapter.setSelectedPositions("none");
+                    btnSelectUnselectAll.setText(R.string.select_all_text);
+                }
+            }
+        });*/
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +156,7 @@ public class SettingsActivity extends AppCompatActivity implements Callback<News
                     v.getContext().startActivity(intent);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
                 }
 
             }

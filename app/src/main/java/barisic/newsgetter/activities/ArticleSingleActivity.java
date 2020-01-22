@@ -1,7 +1,8 @@
-package barisic.newsgetter;
+package barisic.newsgetter.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import barisic.newsgetter.R;
 import barisic.newsgetter.helper_classes.ArticleScraper;
 
 public class ArticleSingleActivity extends AppCompatActivity {
@@ -26,7 +28,7 @@ public class ArticleSingleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article_single);
 
-        webArticle = findViewById(R.id.tvArticleText);
+        webArticle = findViewById(R.id.web_view);
         browseButton = findViewById(R.id.browseButton);
 
         Intent i = getIntent();
@@ -36,16 +38,20 @@ public class ArticleSingleActivity extends AppCompatActivity {
             final String url = i.getExtras().getString("url");
 
 //            webArticle = new ArticleScraper(url, webArticle).getArticle();
-            webArticle.loadUrl(url);
-            Log.d("ARTICLE_URL", "ArticleSingleActivity: " + url);
-            /*webArticle.setWebViewClient(new WebViewClient(){
+
+//            webArticle.getSettings().setJavaScriptEnabled(true);
+            webArticle.setWebViewClient(new WebViewClient(){
+                @TargetApi(21)
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    view.loadUrl(url);
+                    webArticle.loadUrl(request.getUrl().toString());
+
                     return true;
                 }
             });
-            webArticle.loadUrl(url);*/
+            webArticle.loadUrl(url);
+            Log.d("ARTICLE_URL", "ArticleSingleActivity: " + url);
+
             browseButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

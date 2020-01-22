@@ -38,7 +38,7 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiArtic
         }
 //        Toast.makeText(getApplicationContext(), date, Toast.LENGTH_LONG).show();
 
-        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(this);
+//        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(this);
     }
 
     @Override
@@ -65,17 +65,8 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiArtic
                 Log.d("URLS", "onResponse: " + article.getArticleUrl());
             }
 
-            switch (newspaper){
-                case "jutarnji":
-                    initRecyclerView(filteredArticlesJutarnji);
-                    break;
-                case "guardian":
-                    initRecyclerView(filteredArticlesGuardian);
-                    break;
-                default:
-                    initRecyclerView(articles);
-                    break;
-            }
+
+
         }
     }
 
@@ -122,10 +113,10 @@ public class NewsTest extends AppCompatActivity implements Callback<NewsApiArtic
         return "";
     }
 
-    public void initRecyclerView(ArrayList<Article> titles){
+    /*public void initRecyclerView(ArrayList<Article> titles){
         final RecyclerView recyclerView = findViewById(R.id.news_recycler_view);
         ArticlesRecyclerViewAdapter adapter = new ArticlesRecyclerViewAdapter(titles);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-    }
+    }*/
 }

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1013274614195",
+    "firebase_url": "https://newsgetter-382b2.firebaseio.com",
+    "project_id": "newsgetter-382b2",
+    "storage_bucket": "newsgetter-382b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1013274614195:android:38698c0ade54654a5053c6",
+        "android_client_info": {
+          "package_name": "barisic.newsgetter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1013274614195-o008tc7brokd5jvfibdo469j8t188gl4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "barisic.newsgetter",
+            "certificate_hash": "dc85035e38a2d39f79eb63860d95237e75473aa2"
+          }
+        },
+        {
+          "client_id": "1013274614195-1pmtg01hu7k2s3m9vfla6linoimg0g3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDLkE4oJainN54DgUfqLb8YJdUW9WTyX6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1013274614195-1pmtg01hu7k2s3m9vfla6linoimg0g3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

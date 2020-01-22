@@ -27,10 +27,10 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private ArrayList<String> urlsDataset;
     private List<Source> sourcesDataset;
 
-    ArrayList<Integer> selectedPositions = new ArrayList<>();
+    private ArrayList<Integer> selectedPositions = new ArrayList<>();
 
-    final String logoScraper = "https://logo.clearbit.com/";
-    CustomViewHolder viewHolder = null;
+    private final String logoScraper = "https://logo.clearbit.com/";
+    private CustomViewHolder viewHolder;
 
     public SourcesRecyclerViewAdapter(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls, List<Source> sources){
         this.namesDataset = names;
@@ -109,6 +109,19 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public ArrayList<Integer> getSelectedPositions(){
         return selectedPositions;
+    }
+
+    public void setSelectedPositions(String positions) {
+//        if(positions.equals("all")){
+        selectedPositions.clear();
+            for(int i = 0; i < getItemCount(); i++){
+                this.selectedPositions.add(i);
+            }
+//        }
+//        else{
+//            selectedPositions.clear();
+//        }
+        notifyDataSetChanged();
     }
 
     public void checkSelectedSources(List<Source> sources){

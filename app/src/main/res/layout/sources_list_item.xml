@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginVertical="5dp"
+    android:layout_marginBottom="7dp"
+    android:layout_marginStart="12dp"
+    android:layout_marginEnd="12dp"
     android:id="@+id/sourceContainer">
 
     <ViewSwitcher
@@ -21,17 +23,17 @@
             <ImageView
                 android:id="@+id/unselectedImageView"
                 android:layout_width="80dp"
-                android:layout_height="80dp"/>
+                android:layout_height="80dp"
+                android:background="@color/white"/>
             <TextView
                 android:id="@+id/tvUnselectedSourceName"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:padding="5dp"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="5dp"/>
+                android:gravity="center_vertical"/>
         </LinearLayout>
 
         <LinearLayout
@@ -43,17 +45,18 @@
             <ImageView
                 android:id="@+id/selectedImageView"
                 android:layout_width="80dp"
-                android:layout_height="80dp"/>
+                android:layout_height="80dp"
+                android:background="@color/white"/>
             <TextView
                 android:id="@+id/tvSelectedSourceName"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:padding="5dp"
-                android:textSize="20dp"
+                android:paddingStart="5dp"
+                android:textSize="20sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
+                android:textColor="@color/eerieBlack"
                 android:gravity="center_vertical"
-                android:paddingHorizontal="5dp"/>
+                android:layout_gravity="center_vertical"/>
         </LinearLayout>
 
     </ViewSwitcher>

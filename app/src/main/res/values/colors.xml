@@ -5,8 +5,12 @@
     <color name="colorAccent">@color/spaceCadet</color>
 
     <color name="richBlack">#08090D</color>
-    <color name="eerieBlack">#161928</color>
-    <color name="spaceCadet">#1D2D5A</color>
-    <color name="lightWhite">#DDDDDD</color>
+    <color name="eerieBlack">#101012</color>
+    <color name="fullBlack">#000000</color>
+    <color name="spaceCadet">#091521</color>
+    <color name="lightGrey">#777777</color>
+<!--    <color name="spaceCadet">#1D2D5A</color>-->
+    <color name="lightWhite">#BBBBBB</color>
+    <color name="heavyWhite">#EEFFFF</color>
     <color name="white">#FFFFFF</color>
 </resources>

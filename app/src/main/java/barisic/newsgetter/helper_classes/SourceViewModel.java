@@ -1,7 +1,6 @@
 package barisic.newsgetter.helper_classes;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -40,5 +39,5 @@ public class SourceViewModel extends AndroidViewModel {
     }
     public void deleteAllSources(){
         repository.deleteAll();
-    };
+    }
 }

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import barisic.newsgetter.db_classes.Source;
+import barisic.newsgetter.fragments.MyNewsItemFragment;
 import barisic.newsgetter.fragments.NewsFragment;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
