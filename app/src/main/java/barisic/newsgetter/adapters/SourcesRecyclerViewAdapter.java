@@ -57,8 +57,6 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
         String url = urlsDataset.get(position);
 
-        checkSelectedSources(sourcesDataset);
-
         Log.d("CHECKER", "checkSelectedSources: " + selectedPositions.toString());
 
         if(!url.matches("")){

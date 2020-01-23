@@ -94,6 +94,8 @@ public class SettingsFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
+        adapter.checkSelectedSources(viewModel.getAllSources());
+
         if(viewModel.getAllSources().size() == 120){
             btnSelectUnselectAll.setText(R.string.unselect_all_text);
         }

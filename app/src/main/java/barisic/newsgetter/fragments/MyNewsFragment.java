@@ -1,6 +1,5 @@
 package barisic.newsgetter.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,20 +21,19 @@ import java.util.List;
 
 
 import barisic.newsgetter.R;
-import barisic.newsgetter.activities.SettingsActivity;
 import barisic.newsgetter.adapters.ViewPagerAdapter;
 import barisic.newsgetter.db_classes.Source;
 import barisic.newsgetter.helper_classes.SourceViewModel;
 
-public class MyNewsItemFragment extends Fragment {
+public class MyNewsFragment extends Fragment {
 
     private final String TAG = "MyNewsFragment";
     private static BottomNavigationView bottomNavigationView;
 
-    public static MyNewsItemFragment newInstance(BottomNavigationView bottomNavigation){
+    public static MyNewsFragment newInstance(BottomNavigationView bottomNavigation){
         bottomNavigationView = bottomNavigation;
 
-        MyNewsItemFragment fragment = new MyNewsItemFragment();
+        MyNewsFragment fragment = new MyNewsFragment();
         return fragment;
     }
 

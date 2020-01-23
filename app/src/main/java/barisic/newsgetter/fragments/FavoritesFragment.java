@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -76,7 +77,7 @@ public class FavoritesFragment extends Fragment {
             @Override
             public void onChanged(List<Favorite> favorites) {
                 if(adapter.getItemCount() != 0){
-                    recyclerView.setBackgroundColor(getResources().getColor(R.color.eerieBlack));
+                    recyclerView.setBackgroundColor(getResources().getColor(R.color.fullBlack));
                     tvNoFavorites.setText("");
                 }
                 else{

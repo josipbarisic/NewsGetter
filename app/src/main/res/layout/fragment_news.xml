@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:context=".fragments.NewsFragment"
-    android:background="@color/eerieBlack">
+    android:background="@color/fullBlack">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/news_recycler_view"
