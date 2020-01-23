@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">@color/eerieBlack</color>
+    <color name="colorPrimary">@color/fullBlack</color>
     <color name="colorPrimaryDark">@color/richBlack</color>
     <color name="colorAccent">@color/spaceCadet</color>
 
-    <color name="richBlack">#08090D</color>
+    <color name="richBlack">#0C0F0D</color>
+<!--    <color name="eerieBlack">#181818</color>-->
     <color name="eerieBlack">#101012</color>
     <color name="fullBlack">#000000</color>
     <color name="spaceCadet">#091521</color>

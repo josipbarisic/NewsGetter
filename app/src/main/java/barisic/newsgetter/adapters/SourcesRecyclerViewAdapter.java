@@ -13,6 +13,11 @@ import android.widget.ViewSwitcher;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,7 +82,7 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
                     for (Source source: sourcesDataset){
                         if(source.getDomain().matches(domainsDataset.get(viewHolder.getAdapterPosition()))){
-                            Log.d("UNSELECTED", "onClick: " + source.getName());
+
                             sourcesDataset.remove(source);
 
                             //break to prevent crash because of dataset change while in for loop
@@ -85,17 +90,18 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         }
                     }
                 }
-                Log.d("SELECTED_POSNS", "Sources onClick: " + selectedPositions);
 
             }
         });
 
-        if(!selectedPositions.isEmpty() && selectedPositions.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.unselectedLayout){
+        if(selectedPositions.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.unselectedLayout){
             viewHolder.viewSwitcher.showNext();
         }
-        else if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.selectedLayout){
+        else if(!selectedPositions.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.selectedLayout){
             viewHolder.viewSwitcher.showPrevious();
         }
+
+        Log.d("BINDER_SELECTED", "Positions: " + selectedPositions);
 
         viewHolder.tvUnselectedSourceName.setText(namesDataset.get(position));
 
@@ -112,15 +118,21 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void setSelectedPositions(String positions) {
-//        if(positions.equals("all")){
-        selectedPositions.clear();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("sources");
+
+        if(positions.equals("all")){
+            selectedPositions.clear();
             for(int i = 0; i < getItemCount(); i++){
-                this.selectedPositions.add(i);
+                selectedPositions.add(i);
             }
-//        }
-//        else{
-//            selectedPositions.clear();
-//        }
+            Log.d("SELECTED_POSITIONS:", "setSelectedPositions SELECT: " + selectedPositions.toString());
+        }
+        else{
+            selectedPositions.clear();
+            sourcesDataset.clear();
+            Log.d("SELECTED_POSITIONS:", "setSelectedPositions UNSELECT: " + selectedPositions.toString());
+        }
         notifyDataSetChanged();
     }
 

@@ -12,7 +12,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/news_view_pager"
         app:tabMode="scrollable"
-        android:background="@color/richBlack"
+        android:background="@color/fullBlack"
         app:tabTextColor="@color/lightWhite"
         app:tabSelectedTextColor="@color/white">
     </com.google.android.material.tabs.TabLayout>

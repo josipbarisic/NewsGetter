@@ -5,44 +5,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/eerieBlack">
 
-    <TextView
-        android:id="@+id/tvSelectSources"
-        android:layout_width="0dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="21sp"
-        android:textColor="@color/heavyWhite"
-        android:text="@string/choose_source"
-        android:background="@color/eerieBlack"
-        android:padding="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        android:id="@+id/toolbar"
+        android:background="@color/fullBlack"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
 
-    <!--<Button
-        android:id="@+id/btnSelectUnselectAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/tvSelectSources"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:background="@drawable/space_drawable"
-        android:textSize="15sp"
-        android:text="@string/select_all_text"
-        android:layout_marginEnd="5dp"/>-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/image_view"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/tvSelectSources"
+            android:src="@drawable/newsgetter_logo"/>
+
+        <TextView
+            android:id="@+id/tvSelectSources"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="21sp"
+            android:textColor="@color/heavyWhite"
+            android:text="@string/choose_source"
+            android:padding="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/image_view"
+            app:layout_constraintEnd_toStartOf="@+id/btnSelectUnselectAll"/>
+
+        <Button
+            android:id="@+id/btnSelectUnselectAll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/tvSelectSources"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@drawable/space_drawable"
+            android:textSize="15sp"
+            android:text="@string/select_all_text"
+            android:textColor="@color/white"
+            android:layout_marginEnd="10dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:elevation="5dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/sources_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tvSelectSources"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toTopOf="@+id/btnSelectSources"/>
 
     <Button
         android:id="@+id/btnSelectSources"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/space_drawable"
+        android:background="@drawable/light_drawable"
         android:textColor="@color/fullBlack"
         android:textSize="15sp"
         android:text="@string/confirm_sources"

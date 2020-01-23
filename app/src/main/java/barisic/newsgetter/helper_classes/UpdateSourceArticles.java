@@ -22,7 +22,7 @@ import retrofit2.Response;
 public class UpdateSourceArticles{
 
     private static FirebaseDatabase database;
-    private static DatabaseReference dbRef;
+    private static DatabaseReference dbSources;
     private static DatabaseReference dbSource;
 
     private static String sourceId;
@@ -33,9 +33,9 @@ public class UpdateSourceArticles{
     public static void update(){
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("sources");
+        dbSources = database.getReference("sources");
 
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbSources.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snap: dataSnapshot.getChildren()){
@@ -43,7 +43,7 @@ public class UpdateSourceArticles{
                     sourceId = snap.getKey();
                     sourceDomain = snap.child("domain").getValue().toString();
 
-                    dbSource = dbRef.child(sourceId);
+                    dbSource = dbSources.child(sourceId);
 
                     Log.d("UpdateArticles", "onDataChange: " + sourceDomain + " || " + dbSource);
 

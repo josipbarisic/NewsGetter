@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,29 +12,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 import barisic.newsgetter.R;
 import barisic.newsgetter.TestActivity;
 import barisic.newsgetter.adapters.SourcesRecyclerViewAdapter;
-import barisic.newsgetter.helper_classes.ApiManager;
 import barisic.newsgetter.helper_classes.SourceViewModel;
-import barisic.newsgetter.news_api_classes.NewsApiSources;
-import barisic.newsgetter.news_api_classes.Source;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import barisic.newsgetter.helper_classes.UpdateArticlesApiCall;
 
-public class SettingsFragment extends Fragment implements Callback<NewsApiSources> {
+public class SettingsFragment extends Fragment {
 
-    private String url = "sources?apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
     private RecyclerView recyclerView;
     private Button btnConfirm;
     private Button btnSelectUnselectAll;
@@ -46,6 +42,7 @@ public class SettingsFragment extends Fragment implements Callback<NewsApiSource
     private ArrayList<Integer> selectedSources = new ArrayList<>();
 
     private SourceViewModel viewModel;
+    private DatabaseReference dbSources;
 
     public static SettingsFragment newInstance(){
         return new SettingsFragment();
@@ -57,58 +54,36 @@ public class SettingsFragment extends Fragment implements Callback<NewsApiSource
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         btnConfirm = view.findViewById(R.id.btnSelectSources);
-//        btnSelectUnselectAll = view.findViewById(R.id.btnSelectUnselectAll);
-
-        /*progressBar = findViewById(R.id.progressBar);
-
-        progressBar.getIndeterminateDrawable().setColorFilter(Color.parseColor("#ffffff"), PorterDuff.Mode.MULTIPLY);*/
-
-        ApiManager.getInstance().getSourcesService().getApiSources(url).enqueue(this);
+        btnSelectUnselectAll = view.findViewById(R.id.btnSelectUnselectAll);
 
         viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
+
+        UpdateArticlesApiCall.loadArticles("abc-news");
+
+        getSources(view);
 
         return view;
     }
 
-    @Override
-    public void onResponse(@NonNull Call<NewsApiSources> call, Response<NewsApiSources> response) {
-        if(response.isSuccessful()){
-            ArrayList<Source> sources = response.body().getSources();
-
-            namesList.add("24sata");
-            domainsList.add("24sata.hr");
-            urlsList.add("https://www.24sata.hr/");
-
-            int i = 1;
-            String domain;
-            for (Source source: sources){
-                URL url = null;
-                try {
-                    url = new URL(source.getUrl());
-                }catch (MalformedURLException e){
-                    Log.d("URL MALFORMED", "onResponse: " + e);
+    private void getSources(final View view){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        dbSources = database.getReference("sources");
+        dbSources.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    namesList.add(snap.child("name").getValue().toString());
+                    domainsList.add(snap.child("domain").getValue().toString());
+                    urlsList.add(snap.child("url").getValue().toString());
                 }
-                domain = url.getHost();
-
-                if(!source.getSourceId().matches("google-news-(.*)")){
-                    if(source.getSourceId().equals("la-gaceta")){
-                        namesList.add("Jutarnji List");
-                        domainsList.add("jutarnji.hr");
-                        urlsList.add("https://www.jutarnji.hr/");
-                    }
-                    namesList.add(source.getName());
-                    domainsList.add(source.getSourceId());
-                    urlsList.add(domain);
-                    Log.d("NEWS", "onResponse: " + source.getName() + " SOURCE_ID: ///"+ source.getSourceId() +"/// NO."+ i++);
-                }
+                initRecyclerView(view, namesList, domainsList, urlsList);
             }
 
-            initRecyclerView(getView(), namesList, domainsList, urlsList);
-        }
-    }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
-    @Override
-    public void onFailure(Call<NewsApiSources> call, Throwable t) {
+            }
+        });
 
     }
 
@@ -119,20 +94,24 @@ public class SettingsFragment extends Fragment implements Callback<NewsApiSource
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
 
-        /*btnSelectUnselectAll.setOnClickListener(new View.OnClickListener() {
+        if(viewModel.getAllSources().size() == 120){
+            btnSelectUnselectAll.setText(R.string.unselect_all_text);
+        }
+
+        btnSelectUnselectAll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectedSources = adapter.getSelectedPositions();
-                if(selectedSources.isEmpty()){
+                if(btnSelectUnselectAll.getText().equals(getString(R.string.select_all_text))){
                     adapter.setSelectedPositions("all");
                     btnSelectUnselectAll.setText(R.string.unselect_all_text);
-                }
+            }
                 else{
                     adapter.setSelectedPositions("none");
                     btnSelectUnselectAll.setText(R.string.select_all_text);
                 }
             }
-        });*/
+        });
 
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override

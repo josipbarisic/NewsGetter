@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,6 +29,8 @@ public class FavoritesFragment extends Fragment {
     private ArticlesRecyclerViewAdapter adapter;
     private ArrayList<Article> articles;
 
+    private TextView tvNoFavorites;
+
     public static FavoritesFragment newInstance() {
         return new FavoritesFragment();
     }
@@ -36,6 +39,8 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
+
+        tvNoFavorites = view.findViewById(R.id.tvNoFavorites);
 
         FavoriteViewModel viewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
         articles = new ArrayList<>();
@@ -64,22 +69,25 @@ public class FavoritesFragment extends Fragment {
     }
 
     private void initRecyclerView(View view, ArrayList<Article> articles) {
+        final RecyclerView recyclerView = view.findViewById(R.id.favorites_recycler_view);
 
         FavoriteViewModel favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        /*favoriteViewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
+        favoriteViewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
             @Override
             public void onChanged(List<Favorite> favorites) {
-                favoriteViewModel.deleteAllFavorites();
-                for(Favorite favorite: favorites){
-                    favoriteViewModel.insertFavorite(favorite);
+                if(adapter.getItemCount() != 0){
+                    recyclerView.setBackgroundColor(getResources().getColor(R.color.eerieBlack));
+                    tvNoFavorites.setText("");
+                }
+                else{
+                    recyclerView.setBackgroundColor(getResources().getColor(R.color.spaceCadet));
+                    tvNoFavorites.setText(R.string.no_favorites);
                 }
             }
-        });*/
+        });
 
-        RecyclerView recyclerView = view.findViewById(R.id.favorites_recycler_view);
         adapter = new ArticlesRecyclerViewAdapter(articles, favoriteViewModel, "FavoritesFragment", getViewLifecycleOwner());
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
     }
 }

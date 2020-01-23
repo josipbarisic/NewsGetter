@@ -39,18 +39,18 @@ public class ArticleSingleActivity extends AppCompatActivity {
 
 //            webArticle = new ArticleScraper(url, webArticle).getArticle();
 
-//            webArticle.getSettings().setJavaScriptEnabled(true);
+            webArticle.getSettings().setJavaScriptEnabled(true);
+            //enable opening links in WebView
             webArticle.setWebViewClient(new WebViewClient(){
                 @TargetApi(21)
                 @Override
                 public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-                    webArticle.loadUrl(request.getUrl().toString());
+                    view.loadUrl(request.getUrl().toString());
 
                     return true;
                 }
             });
             webArticle.loadUrl(url);
-            Log.d("ARTICLE_URL", "ArticleSingleActivity: " + url);
 
             browseButton.setOnClickListener(new View.OnClickListener() {
                 @Override

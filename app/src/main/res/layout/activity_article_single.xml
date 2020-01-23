@@ -17,7 +17,7 @@
         android:id="@+id/browseButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/like_drawable"
+        android:background="@color/fullBlack"
         app:layout_constraintBottom_toBottomOf="parent"
         android:text="@string/browse_button"
         android:textColor="@color/heavyWhite"

@@ -1,5 +1,6 @@
 package barisic.newsgetter.helper_classes;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -12,22 +13,15 @@ import retrofit2.Response;
 
 public class UpdateArticlesApiCall implements Callback<NewsApiArticles> {
 
-    private static UpdateArticlesApiCall instance;
     private static ArrayList<Article> articles = new ArrayList<>();
     private static String url;
 
-    public static UpdateArticlesApiCall getInstance(){
-        if(instance == null){
-            instance = new UpdateArticlesApiCall();
-        }
-        return instance;
-    }
-
     public static void loadArticles(String domain){
+        UpdateArticlesApiCall instance = new UpdateArticlesApiCall();
         url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
 
-        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(UpdateArticlesApiCall.getInstance());
-        Log.d("API_CALLER", "getArticles: SHIT");
+        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(instance);
+        Log.d("API_CALLER", "LOADING SOURCE ARTICLES..." + domain.toUpperCase());
     }
 
     public static ArrayList<Article> getArticles(){
@@ -36,7 +30,9 @@ public class UpdateArticlesApiCall implements Callback<NewsApiArticles> {
 
     @Override
     public void onResponse(Call<NewsApiArticles> call, Response<NewsApiArticles> response) {
+        Log.d("API_CALLER", "onResponse: ONRESPONSE");
         if(response.isSuccessful()){
+            Log.d("API_CALLER", "onResponse: " + response.body().getResponse().toString());
             articles = response.body().getResponse();
             for(Article art: articles){
                 Log.d("API_CALLER", "onResponse: " + art.getTitle());
@@ -46,6 +42,6 @@ public class UpdateArticlesApiCall implements Callback<NewsApiArticles> {
 
     @Override
     public void onFailure(Call<NewsApiArticles> call, Throwable t) {
-
+        Log.d("API_CALLER", "onResponse: FAILED");
     }
 }
