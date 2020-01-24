@@ -6,17 +6,13 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import barisic.newsgetter.R;
-import barisic.newsgetter.helper_classes.ArticleScraper;
 
 public class ArticleSingleActivity extends AppCompatActivity {
 
@@ -36,8 +32,6 @@ public class ArticleSingleActivity extends AppCompatActivity {
         if(i.getExtras() != null){
 
             final String url = i.getExtras().getString("url");
-
-//            webArticle = new ArticleScraper(url, webArticle).getArticle();
 
             webArticle.getSettings().setJavaScriptEnabled(true);
             //enable opening links in WebView

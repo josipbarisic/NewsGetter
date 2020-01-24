@@ -1,93 +1,94 @@
 package barisic.newsgetter;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.viewpager.widget.ViewPager;
+import androidx.fragment.app.FragmentManager;
 
-import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.view.MenuItem;
 
-import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
-import java.util.Locale;
-
-import barisic.newsgetter.activities.SettingsActivity;
-import barisic.newsgetter.adapters.ViewPagerAdapter;
-import barisic.newsgetter.db_classes.Source;
-import barisic.newsgetter.helper_classes.SourceViewModel;
+import barisic.newsgetter.fragments.FavoritesFragment;
+import barisic.newsgetter.fragments.MyNewsFragment;
+import barisic.newsgetter.fragments.SearchFragment;
+import barisic.newsgetter.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity{
 
-    TabLayout tabLayout;
-    ViewPager viewPager;
-    ImageView imageView;
+    String TAG = "MainActivity";
 
-    private static final String TAG = "MAIN_ACT";
-
-    private SourceViewModel sourceViewModel;
+    BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setTheme(R.style.AppTheme);
+//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        setLocale("hr");
         setContentView(R.layout.activity_main);
 
-        tabLayout = findViewById(R.id.tabLayout);
-        imageView = findViewById(R.id.imageView);
-        viewPager= findViewById(R.id.viewPager);
-
-        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-        sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
-        sourceViewModel.getSourcesUpdate().observe(this, new Observer<List<Source>>() {
+        /*final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setMessage(R.string.headlines_button);
+        alert.setPositiveButton(R.string.confirm_sources, new DialogInterface.OnClickListener() {
             @Override
-            public void onChanged(List<Source> sources) {
-                //POSTAVLJANJE FRAGMENATA U ViewPagerAdapter
-                adapter.resetFragments(sources);
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
+            }
+        });
+        alert.setNegativeButton(R.string.dislike_text, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(MainActivity.this, "NOT_OK", Toast.LENGTH_SHORT).show();
+            }
+        });
 
-                if(adapter.getCount() == 0){
-                    Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        alert.setPositiveButtonIcon(this.getResources().getDrawable(R.drawable.newsgetter_logo));
+        alert.setView(this.getResources().get(R.drawable.like_drawable))
+        alert.show();*/
 
-//                    startActivity(intent);
-//                    finish();
+//        UpdateDatabaseSources.updateInstance();
+//        UpdateSourceArticles.update();
 
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
+        bottomNavigationView = findViewById(R.id.bottom_nav);
+
+        final Fragment myNewsFragment = MyNewsFragment.newInstance(bottomNavigationView);
+        final Fragment searchFragment = SearchFragment.newInstance();
+        final Fragment settingsFragment = SettingsFragment.newInstance();
+        final Fragment favoritesFragment = FavoritesFragment.newInstance();
+        final FragmentManager fragmentManager = getSupportFragmentManager();
+
+        fragmentManager.beginTransaction().add(R.id.main_frame, myNewsFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_frame, searchFragment).hide(searchFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_frame, settingsFragment).hide(settingsFragment).commit();
+        fragmentManager.beginTransaction().add(R.id.main_frame, favoritesFragment).hide(favoritesFragment).commit();
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+            Fragment activeFragment = myNewsFragment;
+
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                switch (menuItem.getItemId()){
+                    case R.id.nav_news:
+                        fragmentManager.beginTransaction().hide(activeFragment).show(myNewsFragment).commit();
+                        activeFragment = myNewsFragment;
+                        return true;
+                    case R.id.nav_search:
+                        fragmentManager.beginTransaction().hide(activeFragment).show(searchFragment).commit();
+                        activeFragment = searchFragment;
+                        return true;
+                    case R.id.nav_sources:
+                        fragmentManager.beginTransaction().hide(activeFragment).show(settingsFragment).commit();
+                        activeFragment = settingsFragment;
+                        return true;
+                    case R.id.nav_favorites:
+                        fragmentManager.beginTransaction().hide(activeFragment).show(favoritesFragment).commit();
+                        activeFragment = favoritesFragment;
+                        return true;
                 }
+                return false;
             }
         });
-
-        Log.d(TAG, "onCreate: " + adapter.getCount());
-
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
-
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
-
-                startActivity(intent);
-            }
-        });
-    }
-
-    private void setLocale(String lang){
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-
-        Configuration config = new Configuration();
-        config.locale = locale;
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-
     }
 }

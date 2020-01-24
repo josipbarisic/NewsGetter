@@ -37,7 +37,6 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private String fragmentName;
     private LifecycleOwner lifecycleOwner;
 
-    private int current_position;
     private Article article = null;
     private Favorite favorite = null;
 
@@ -52,7 +51,7 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.news_list_item, parent, false);
-        final CustomViewHolder viewHolder = new CustomViewHolder(view, viewType);
+        final CustomViewHolder viewHolder = new CustomViewHolder(view);
 
         viewHolder.articleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -136,9 +135,10 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         viewHolder.tvTitle.setText(dataset.get(position).getTitle());
         viewHolder.articleUrl = dataset.get(position).getArticleUrl();
         viewHolder.articleDescription.setText(dataset.get(position).getDescription());
+
         //Postavljanje slike u ImageView s Picasso library-em
         if(imageUrl != null && !imageUrl.matches("")){
-            Picasso.get().load(imageUrl).resize(1280, 720).onlyScaleDown().into(viewHolder.articleImage);
+            Picasso.get().load(imageUrl).resize(1280, 850).onlyScaleDown().into(viewHolder.articleImage);
         }
 
         favoriteViewModel.getAllFavorites().observe(lifecycleOwner, new Observer<List<Favorite>>() {
@@ -190,7 +190,7 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
         String articleUrl;
 
-        public CustomViewHolder(@NonNull View itemView, int viewType){
+        private CustomViewHolder(@NonNull View itemView){
             super(itemView);
 
             tvDate = itemView.findViewById(R.id.tvDate);

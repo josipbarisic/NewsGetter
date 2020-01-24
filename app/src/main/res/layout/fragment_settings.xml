@@ -27,11 +27,12 @@
             android:id="@+id/tvSelectSources"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="21sp"
+            android:textSize="18sp"
             android:textColor="@color/heavyWhite"
             android:text="@string/choose_source"
-            android:padding="10dp"
+            android:padding="5dp"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/image_view"
             app:layout_constraintEnd_toStartOf="@+id/btnSelectUnselectAll"/>
 

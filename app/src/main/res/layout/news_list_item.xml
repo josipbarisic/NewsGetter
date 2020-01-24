@@ -66,19 +66,23 @@
 
     <ViewSwitcher
         android:id="@+id/viewSwitcher"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         app:layout_constraintTop_toBottomOf="@id/clArticle"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_margin="20dp"
-        android:padding="5dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/shareContainer"
+        android:background="@drawable/like_drawable"
+        android:elevation="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
 
         <LinearLayout
             android:id="@+id/likeContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@drawable/space_drawable">
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -86,8 +90,7 @@
                 android:textColor="@color/heavyWhite"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
-                android:textSize="18sp"
-                android:layout_marginStart="10dp"/>
+                android:textSize="18sp"/>
 
             <ImageView
                 android:id="@+id/likeButton"
@@ -103,7 +106,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:background="@drawable/space_drawable">
+            android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,15 +130,18 @@
 
     <LinearLayout
         android:id="@+id/shareContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
         app:layout_constraintTop_toBottomOf="@id/clArticle"
-        app:layout_constraintRight_toRightOf="parent"
-        android:background="@drawable/space_drawable"
-        android:layout_margin="20dp"
-        android:padding="5dp"
+        app:layout_constraintStart_toEndOf="@id/viewSwitcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/like_drawable"
+        android:elevation="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:orientation="horizontal"
-        >
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -149,9 +155,10 @@
 
         <ImageView
             android:id="@+id/shareButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/share_icon_drawable" />
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/share_icon_drawable"
+            android:layout_gravity="center"/>
 
     </LinearLayout>
 

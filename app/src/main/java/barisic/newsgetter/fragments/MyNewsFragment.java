@@ -62,10 +62,6 @@ public class MyNewsFragment extends Fragment {
                 adapter.resetFragments(sources);
 
                 if(adapter.getCount() == 0){
-                    /*Intent intent = new Intent(view.getContext(), SettingsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    startActivity(intent);*/
 
                     bottomNavigationView.setSelectedItemId(R.id.nav_sources);
 

@@ -14,7 +14,7 @@
         android:supportsRtl="true"
         android:theme="@style/SplashScreen"
         android:usesCleartextTraffic="true">
-        <activity android:name=".TestActivity"
+        <activity android:name=".MainActivity"
             android:resizeableActivity="false"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
@@ -24,18 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--<activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
-            <intent-filter>
-&lt;!&ndash;                <action android:name="android.intent.action.MAIN" />&ndash;&gt;
-                <action android:name="android.intent.action.VIEW" />
-
-&lt;!&ndash;                <category android:name="android.intent.category.LAUNCHER" />&ndash;&gt;
-            </intent-filter>
-        </activity>
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".NewsTest" />-->
         <activity android:name=".activities.ArticleSingleActivity" />
     </application>
 

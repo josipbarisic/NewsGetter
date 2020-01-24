@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 import barisic.newsgetter.R;
-import barisic.newsgetter.TestActivity;
+import barisic.newsgetter.MainActivity;
 import barisic.newsgetter.adapters.SourcesRecyclerViewAdapter;
 import barisic.newsgetter.helper_classes.SourceViewModel;
 import barisic.newsgetter.helper_classes.UpdateArticlesApiCall;
@@ -58,7 +58,7 @@ public class SettingsFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
 
-        UpdateArticlesApiCall.loadArticles("abc-news");
+//        UpdateArticlesApiCall.loadArticles("abc-news");
 
         getSources(view);
 
@@ -119,7 +119,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(v.getContext(), TestActivity.class);
+                Intent intent = new Intent(v.getContext(), MainActivity.class);
 
 
                 viewModel.deleteAllSources();
