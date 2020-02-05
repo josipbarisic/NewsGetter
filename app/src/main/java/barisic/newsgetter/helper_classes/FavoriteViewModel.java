@@ -9,8 +9,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import barisic.newsgetter.db_classes.DatabaseManager;
 import barisic.newsgetter.db_classes.Favorite;
-import barisic.newsgetter.db_classes.FavoritesDatabase;
 import barisic.newsgetter.interfaces.FavoriteDAO;
 
 public class FavoriteViewModel extends AndroidViewModel {
@@ -19,7 +19,7 @@ public class FavoriteViewModel extends AndroidViewModel {
 
     public FavoriteViewModel(@NonNull Application application) {
         super(application);
-        favoriteDAO = FavoritesDatabase.getInstance(application).favoriteDAO();
+        favoriteDAO = DatabaseManager.getFavoritesInstance(application).favoriteDAO();
         favoritesLiveList = favoriteDAO.getFavoritesUpdate();
     }
 

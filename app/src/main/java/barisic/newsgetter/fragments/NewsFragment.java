@@ -1,9 +1,9 @@
 package barisic.newsgetter.fragments;
-
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +16,15 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import barisic.newsgetter.R;
@@ -28,6 +32,7 @@ import barisic.newsgetter.adapters.ArticlesRecyclerViewAdapter;
 import barisic.newsgetter.db_classes.Favorite;
 import barisic.newsgetter.helper_classes.ApiManager;
 import barisic.newsgetter.helper_classes.FavoriteViewModel;
+import barisic.newsgetter.helper_classes.UpdateArticlesApiCall;
 import barisic.newsgetter.news_api_classes.Article;
 import barisic.newsgetter.news_api_classes.NewsApiArticles;
 import retrofit2.Call;
@@ -35,108 +40,123 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class NewsFragment extends Fragment implements Callback<NewsApiArticles> {
+public class NewsFragment extends Fragment {
 
     private String url;
-    private static String domain;
+    private String domainHolder;
 
-    static ArticlesRecyclerViewAdapter adapter;
+    private ArticlesRecyclerViewAdapter adapter;
 
     private final static String TAG = "NewsFragment";
 
-    //datum za url parametar from (OVERCOMPLICATED)
-    DateFormat dfy = new SimpleDateFormat("yyyy");
-    DateFormat dfm = new SimpleDateFormat("MM");
-    DateFormat dfd = new SimpleDateFormat("dd");
-    Date oDate = new Date();
-    int day = Integer.parseInt(dfd.format(oDate)) - 2;
+    ArrayList<Article> articles = new ArrayList<>();
+    Article article;
 
-    String date = dfy.format(oDate) + "-" + dfm.format(oDate) + "-" + day;
+    FavoriteViewModel favoriteViewModel;
 
-    public static NewsFragment newInstance(String fragmentDomain){
-        domain = fragmentDomain;
-        NewsFragment fragment = new NewsFragment();
+    public NewsFragment(String source_domain){
+        domainHolder = source_domain;
 
-        if(domain.equals("jutarnji.hr") || domain.equals("24sata.hr")){
-            fragment.url = "everything?domains="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-            Log.d("JUTARNJI", "NewsFragment: " + domain);
-        }
-        else if(domain.contains("-recommended-news-")){
-            fragment.url = "top-headlines?country=us&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-        }
-        else if(domain.contains("searchQuery-")){
-            Log.d(TAG, "newInstance: " + domain + "|||" + domain.replace("searchQuery-", ""));
-            fragment.url = "everything?q=" + domain.replace("searchQuery-", "") + "&sortBy=publishedAt&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
+        Log.d(TAG, "newInstance: " + domainHolder);
+
+        if(domainHolder.contains("searchQuery-")){
+            favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+            url = "everything?q=" + domainHolder.replace("searchQuery-", "") + "&sortBy=publishedAt&pageSize=100&apiKey=39bfc7dc081544caad92115e59fe9722";
+            ApiManager.getInstance().getArticlesService().getNews(url).enqueue(new Callback<NewsApiArticles>() {
+                @Override
+                public void onResponse(@NonNull Call<NewsApiArticles> call, @NonNull Response<NewsApiArticles> response) {
+                    if(response.body() != null && response.isSuccessful()){
+                        NewsApiArticles apiResponse = response.body();
+                        articles = apiResponse.getResponse();
+
+                        View view = getView();
+                        if(view != null){
+                            initRecyclerView(view, articles, favoriteViewModel);
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<NewsApiArticles> call, @NonNull Throwable t) {
+
+                }
+            });
         }
         else{
-            fragment.url = "everything?sources="+ domain +"&pageSize=100&apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
-            Log.d("ELSE", "NewsFragment: " + domain);
+            loadArticles(domainHolder, favoriteViewModel);
         }
-        return fragment;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_news, container, false);
-        ApiManager.getInstance().getArticlesService().getNews(url).enqueue(this);
+        final View view = inflater.inflate(R.layout.fragment_news, container, false);
+
+        if(!domainHolder.contains("searchQuery-")){
+            favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+            initRecyclerView(view, articles, favoriteViewModel);
+        }
 
         return view;
     }
 
-    @Override
-    public void onResponse(Call<NewsApiArticles> call, Response<NewsApiArticles> response) {
-        if(response.isSuccessful()){
-            NewsApiArticles apiResponse = response.body();
-            ArrayList<Article> articles = apiResponse.getResponse();
-            Log.d("SOURCE_ARTICLES", "onResponse: " + articles.size());
+    private void initRecyclerView(View view, ArrayList<Article> articles, FavoriteViewModel fvm){
+        Log.d("NewsFragment", "Initializing RV articles: " + articles.toString());
 
-            View view = getView();
-            if(view != null){
-                initRecyclerView(view, articles);
-            }
+        if(fvm != null){
+            fvm.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
+                @Override
+                public void onChanged(List<Favorite> favorites) {
+                    adapter.notifyDataSetChanged();
+                }
+            });
+
+            RecyclerView recyclerView = view.findViewById(R.id.news_recycler_view);
+            adapter = new ArticlesRecyclerViewAdapter(articles, fvm, "NewsFragment", getViewLifecycleOwner());
+            recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         }
-
     }
 
-    @Override
-    public void onFailure(Call<NewsApiArticles> call, Throwable t) {
+    private void loadArticles(final String domain, final FavoriteViewModel fvm){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference dbArticles = database.getReference("articles");
 
-    }
-
-    private void initRecyclerView(View view, ArrayList<Article> articles){
-        Log.d("NewsFragment", "onCreateView: " + articles);
-        FavoriteViewModel favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-
-        favoriteViewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
+        dbArticles.orderByChild("date").limitToLast(100).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChanged(List<Favorite> favorites) {
-                adapter.notifyDataSetChanged();
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                articles.clear();
+                for(DataSnapshot snap: dataSnapshot.getChildren()){
+                    Log.d(TAG, "onDataChange: FIREBASE_DOMAIN: " + snap.child("source_domain").getValue() + " ||| PASSED_DOMAIN: " + domain + " CONDITION: " );
+                        if(domain.matches(String.valueOf(snap.child("source_domain").getValue()))){
+                            Log.d(TAG, "ACCEPTED: LOADING " + snap.child("source_domain").getValue() + "...");
+
+                            article = new Article();
+                            article.setTitle(String.valueOf(snap.child("title").getValue()));
+                            article.setPublishedAt(String.valueOf(snap.child("date").getValue()));
+                            article.setUrlToImage(String.valueOf(snap.child("image").getValue()));
+                            article.setDescription(String.valueOf(snap.child("description").getValue()));
+                            article.setUrl(String.valueOf(snap.child("url").getValue()));
+
+                            Log.d(TAG, "onDataChange: ARTICLE: " + snap.getKey() + " || DESCRIPTION: " + article.getDescription());
+
+                            articles.add(0, article);
+                        }
+//                        Log.d(TAG, "onDataChange: " + snap.child("source_domain").getValue());
+                }
+                if(getView() != null){
+                    initRecyclerView(getView(), articles, fvm);
+                    adapter.notifyDataSetChanged();
+                }
+
+                Log.d(TAG, "onDataChange: FRAGMENT: " + domain + " ARTICLES: " + articles.toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
-
-        RecyclerView recyclerView = view.findViewById(R.id.news_recycler_view);
-        adapter = new ArticlesRecyclerViewAdapter(articles, favoriteViewModel, "NewsFragment", getViewLifecycleOwner());
-        recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        //Listener za infinite loading
-        /*recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                final int DIRECTION_DOWN = 1;
-
-                if(!recyclerView.canScrollVertically(DIRECTION_DOWN)){
-                    Toast.makeText(getContext(), "Last item" + adapter.getItemCount(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-    }
-
-    public static void updateAdapter(){
-        adapter.notifyDataSetChanged();
     }
 }

@@ -10,6 +10,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import androidx.annotation.NonNull;
@@ -45,6 +46,10 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         favoriteViewModel = viewModel;
         fragmentName = fragment;
         lifecycleOwner = owner;
+
+        Log.d("ARTICLES_RECYCLER", "ArticlesRecyclerViewAdapter: NAME " + fragmentName);
+        Log.d("ARTICLES_RECYCLER", "ArticlesRecyclerViewAdapter: ARTICLES -> " + dataset.size());
+
     }
 
     @NonNull
@@ -56,10 +61,15 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         viewHolder.articleLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(v.getContext(), ArticleSingleActivity.class);
-                intent.putExtra("url", viewHolder.articleUrl);
+                if(!viewHolder.articleUrl.matches("null")){
+                    Intent intent = new Intent(v.getContext(), ArticleSingleActivity.class);
+                    intent.putExtra("url", viewHolder.articleUrl);
 
-                v.getContext().startActivity(intent);
+                    v.getContext().startActivity(intent);
+                }
+                else{
+                    Toast.makeText(view.getContext(), view.getResources().getString(R.string.url_not_available), Toast.LENGTH_SHORT).show();
+                }
 
             }
         });
@@ -95,7 +105,7 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if(dataset != null){
                     article = dataset.get(viewHolder.getAdapterPosition());
 
-                    favorite = new Favorite(article.getTitle(), article.getArticleUrl(), article.getImageUrl(), article.getDescription(), article.getDate());
+                    favorite = new Favorite(article.getTitle(), article.getArticleUrl(), article.getImageUrl(), article.getDescription(), article.getPublishedAt());
                 }
 
                 if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
@@ -126,15 +136,18 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         String imageUrl = dataset.get(position).getImageUrl();
 
         if(fragmentName.equals("FavoritesFragment")){
-            viewHolder.tvDate.setText(dataset.get(position).getPublishedAt());
+                viewHolder.tvDate.setText(dataset.get(position).getPublishedAt());
         }
         else{
-            viewHolder.tvDate.setText(dataset.get(position).getDate());
+
+            viewHolder.tvDate.setText(dataset.get(position).getPublishedAt());
         }
 
         viewHolder.tvTitle.setText(dataset.get(position).getTitle());
         viewHolder.articleUrl = dataset.get(position).getArticleUrl();
-        viewHolder.articleDescription.setText(dataset.get(position).getDescription());
+        if(!dataset.get(position).getDescription().matches("null") && !dataset.get(position).getDescription().matches("")){
+            viewHolder.articleDescription.setText(dataset.get(position).getDescription());
+        }
 
         //Postavljanje slike u ImageView s Picasso library-em
         if(imageUrl != null && !imageUrl.matches("")){

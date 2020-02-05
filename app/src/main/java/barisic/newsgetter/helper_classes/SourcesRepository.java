@@ -7,9 +7,9 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import barisic.newsgetter.db_classes.DatabaseManager;
 import barisic.newsgetter.db_classes.Source;
 import barisic.newsgetter.interfaces.SourceDAO;
-import barisic.newsgetter.db_classes.SourceDatabase;
 
 public class SourcesRepository {
     private SourceDAO sourceDAO;
@@ -17,8 +17,7 @@ public class SourcesRepository {
     private List<Source> allSources;
 
     public SourcesRepository(Application application){
-        SourceDatabase database = SourceDatabase.getInstance(application);
-        sourceDAO = database.sourceDAO();
+        sourceDAO = DatabaseManager.getSourcesInstance(application).sourceDAO();
         sourcesUpdate = sourceDAO.getSourcesUpdate();
         allSources = sourceDAO.getAllSources();
     }
@@ -32,7 +31,7 @@ public class SourcesRepository {
     public void deleteSource(Source source){
         new DeleteSourceAsync(sourceDAO).execute(source);
     }
-    public void deleteAll(){
+    public void deleteAllSources(){
         sourceDAO.deleteAll();
     }
     public LiveData<List<Source>> getSourcesUpdate(){

@@ -42,6 +42,7 @@ public class SettingsFragment extends Fragment {
     private ArrayList<Integer> selectedSources = new ArrayList<>();
 
     private SourceViewModel viewModel;
+    FirebaseDatabase database;
     private DatabaseReference dbSources;
 
     public static SettingsFragment newInstance(){
@@ -58,7 +59,7 @@ public class SettingsFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
 
-//        UpdateArticlesApiCall.loadArticles("abc-news");
+        database = FirebaseDatabase.getInstance();
 
         getSources(view);
 
@@ -66,11 +67,14 @@ public class SettingsFragment extends Fragment {
     }
 
     private void getSources(final View view){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         dbSources = database.getReference("sources");
-        dbSources.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbSources.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                namesList.clear();
+                domainsList.clear();
+                urlsList.clear();
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     namesList.add(snap.child("name").getValue().toString());
                     domainsList.add(snap.child("domain").getValue().toString());

@@ -11,6 +11,7 @@ import java.util.List;
 
 import barisic.newsgetter.db_classes.Source;
 import barisic.newsgetter.fragments.NewsFragment;
+import barisic.newsgetter.helper_classes.UpdateArticlesApiCall;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 
@@ -44,14 +45,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public void resetFragments(List<Source> sources){
         removeAllFragments();
-        notifyDataSetChanged();
 
         if(sources == null){
             return;
         }
 
-        for (Source source : sources){
-            addFragment(NewsFragment.newInstance(source.getDomain()), source.getName());
+        for (Source source :sources){
+            UpdateArticlesApiCall.loadArticles(source.getDomain());
+            addFragment(new NewsFragment(source.getDomain()), source.getName());
         }
         notifyDataSetChanged();
     }

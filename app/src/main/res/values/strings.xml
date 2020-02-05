@@ -23,6 +23,7 @@
     <string name="unselect_all_text">Odznači sve</string>
 
     <string name="no_favorites">Nemate favorite</string>
+    <string name="url_not_available">Nažalost, poveznica nije dostupna.</string>
 
     <string name="search_hint">Pretraži vijesti...</string>
     <string name="recommended_text">Preporučene vijesti</string>

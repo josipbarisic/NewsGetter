@@ -24,6 +24,7 @@
     <string name="unselect_all_text">Unselect all</string>
 
     <string name="no_favorites">You don\'t have any favorites</string>
+    <string name="url_not_available">Sorry, link is not available.</string>
 
     <string name="search_hint">Search the News&#8230;</string>
     <string name="recommended_text">Recommended News</string>

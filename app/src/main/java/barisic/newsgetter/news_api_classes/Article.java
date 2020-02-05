@@ -1,5 +1,6 @@
 package barisic.newsgetter.news_api_classes;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -58,7 +59,7 @@ public class Article {
         String month = publishedAt.substring(5, 7);
         String year = publishedAt.substring(0, 4);
 
-        date = day +"/"+ month +"/"+ year +"   "+ hours +":"+ minutes +" GMT";
+        date = day +"/"+ month +"/"+ year +"    "+ hours +":"+ minutes +" GMT";
 
         return date;
     }

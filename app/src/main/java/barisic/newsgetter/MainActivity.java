@@ -23,33 +23,12 @@ public class MainActivity extends AppCompatActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage(R.string.headlines_button);
-        alert.setPositiveButton(R.string.confirm_sources, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
-            }
-        });
-        alert.setNegativeButton(R.string.dislike_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "NOT_OK", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        alert.setPositiveButtonIcon(this.getResources().getDrawable(R.drawable.newsgetter_logo));
-        alert.setView(this.getResources().get(R.drawable.like_drawable))
-        alert.show();*/
+        bottomNavigationView = findViewById(R.id.bottom_nav);
 
 //        UpdateDatabaseSources.updateInstance();
-//        UpdateSourceArticles.update();
-
-        bottomNavigationView = findViewById(R.id.bottom_nav);
 
         final Fragment myNewsFragment = MyNewsFragment.newInstance(bottomNavigationView);
         final Fragment searchFragment = SearchFragment.newInstance();

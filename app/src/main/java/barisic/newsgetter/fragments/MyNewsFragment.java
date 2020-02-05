@@ -1,5 +1,7 @@
 package barisic.newsgetter.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,14 +35,11 @@ public class MyNewsFragment extends Fragment {
     public static MyNewsFragment newInstance(BottomNavigationView bottomNavigation){
         bottomNavigationView = bottomNavigation;
 
-        MyNewsFragment fragment = new MyNewsFragment();
-        return fragment;
+        return new MyNewsFragment();
     }
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private SourceViewModel sourceViewModel;
-
 
     @Nullable
     @Override
@@ -52,7 +51,7 @@ public class MyNewsFragment extends Fragment {
 
         final ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
 
-        sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
+        SourceViewModel sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
 
         sourceViewModel.getSourcesUpdate().observe(this, new Observer<List<Source>>() {
             @Override
@@ -64,7 +63,6 @@ public class MyNewsFragment extends Fragment {
                 if(adapter.getCount() == 0){
 
                     bottomNavigationView.setSelectedItemId(R.id.nav_sources);
-
 
                     Toast.makeText(view.getContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
                 }

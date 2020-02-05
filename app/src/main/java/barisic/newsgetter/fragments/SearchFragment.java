@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 
@@ -37,7 +38,7 @@ public class SearchFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        getFragmentManager().beginTransaction().replace(R.id.recommended_news_layout, NewsFragment.newInstance("-recommended-news-")).commit();
+        getFragmentManager().beginTransaction().replace(R.id.recommended_news_layout, new NewsFragment("-recommended-news-")).commit();
 
         searchView = view.findViewById(R.id.search_view);
         viewSwitcher = view.findViewById(R.id.view_switcher);
@@ -46,13 +47,12 @@ public class SearchFragment extends Fragment {
         final FrameLayout recommendedLayout = view.findViewById(R.id.recommended_news_layout);
         final FrameLayout searchedLayout = view.findViewById(R.id.searched_news_layout);
 
-
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: QUERY");
                 if (!query.matches("")){
-                    getFragmentManager().beginTransaction().replace(R.id.searched_news_layout, NewsFragment.newInstance("searchQuery-" + query)).commit();
+                    getFragmentManager().beginTransaction().replace(R.id.searched_news_layout, new NewsFragment("searchQuery-" + query)).commit();
                     if(viewSwitcher.getCurrentView() == recommendedLayout){
                         viewSwitcher.showNext();
                         header.setText(R.string.results_text);
