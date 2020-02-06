@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Singleton klasa koja upravlja api pozivima.
  */
 public class ApiManager {
-    static ApiManager instance;
+    private static ApiManager instance;
     private ArticlesService articlesService;
     private SourcesService sourcesService;
     private ApiManager(){

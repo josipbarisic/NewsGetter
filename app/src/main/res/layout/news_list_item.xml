@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/news_drawable"
-    android:layout_marginBottom="10dp"
+    android:layout_marginBottom="5dp"
     android:paddingBottom="10dp"
     android:layout_marginTop="1dp"
     android:id="@+id/articleContainer"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
             android:textColor="@color/lightWhite"
-            android:background="@color/richBlack"
+            android:background="@color/eerieBlack"
             android:padding="5dp"
             android:textStyle="bold"/>
 

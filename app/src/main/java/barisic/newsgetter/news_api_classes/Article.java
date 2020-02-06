@@ -1,16 +1,11 @@
 package barisic.newsgetter.news_api_classes;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 public class Article {
-    String title;
-    String url;
-    String urlToImage;
-    String description;
-    String publishedAt;
+    private String title;
+    private String url;
+    private String urlToImage;
+    private String description;
+    private String publishedAt;
 
     public void setTitle(String title) {
         this.title = title;

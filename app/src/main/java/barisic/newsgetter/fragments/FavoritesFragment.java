@@ -1,12 +1,11 @@
 package barisic.newsgetter.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -28,7 +27,7 @@ import barisic.newsgetter.news_api_classes.Article;
 public class FavoritesFragment extends Fragment {
 
     private ArticlesRecyclerViewAdapter adapter;
-    private ArrayList<Article> articles;
+    private FavoriteViewModel favoriteViewModel;
 
     private TextView tvNoFavorites;
 
@@ -41,12 +40,30 @@ public class FavoritesFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_favorites, container, false);
 
+        favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
+
         tvNoFavorites = view.findViewById(R.id.tvNoFavorites);
 
-        FavoriteViewModel viewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        articles = new ArrayList<>();
+        Button btnDeleteAll = view.findViewById(R.id.btnDeleteAllFavorites);
 
-        viewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
+        btnDeleteAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                favoriteViewModel.deleteAllFavorites();
+            }
+        });
+
+        initRecyclerView(view);
+
+        return view;
+    }
+
+    private void initRecyclerView(View view) {
+        final RecyclerView recyclerView = view.findViewById(R.id.favorites_recycler_view);
+
+        final ArrayList<Article> articles = new ArrayList<>();
+
+        favoriteViewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
             @Override
             public void onChanged(List<Favorite> favorites) {
                 articles.clear();
@@ -61,21 +78,7 @@ public class FavoritesFragment extends Fragment {
                     articles.add(article);
                 }
                 adapter.notifyDataSetChanged();
-            }
-        });
 
-        initRecyclerView(view, articles);
-
-        return view;
-    }
-
-    private void initRecyclerView(View view, ArrayList<Article> articles) {
-        final RecyclerView recyclerView = view.findViewById(R.id.favorites_recycler_view);
-
-        FavoriteViewModel favoriteViewModel = ViewModelProviders.of(this).get(FavoriteViewModel.class);
-        favoriteViewModel.getAllFavorites().observe(this, new Observer<List<Favorite>>() {
-            @Override
-            public void onChanged(List<Favorite> favorites) {
                 if(adapter.getItemCount() != 0){
                     recyclerView.setBackgroundColor(getResources().getColor(R.color.fullBlack));
                     tvNoFavorites.setText("");

@@ -1,7 +1,45 @@
 <resources>
-    <string name="apiKey">38fbf5c450684e339b0e300b7bd7f8ea</string>
+    <string-array name="apiKeys">
+        <item>38fbf5c450684e339b0e300b7bd7f8ea</item>
+        <item>7a1b67b3a1de4bdfa45152a4b7e6cb1f</item>
+        <item>1166e61781ca412c992eaa0e9ea2d6e1</item>
+        <item>7f54b20d117a4e6593c4bd1c5ad5f595</item>
+        <item>0bf1e62cd9114e1e97b3405dc10ad965</item>
 
-    <string name="app_name">News Getter</string>
+        <item>1389fda813e64ebba835f00d844e5883</item>
+        <item>a0c52b3b54804583a152e93dfb08685a</item>
+        <item>89ceb0cc025241379a2b1f72f428074f</item>
+        <item>aa3bb6b65477480587655a048a18a195</item>
+        <item>6c2a05fd3370408ea6ce596f1b097115</item>
+
+        <item>1672ddff93104a7d9953a2693b0bb513</item>
+        <item>89129a72bc4943e7b88c83e75559ed21</item>
+        <item>c721e313af9b4a0b8ac9d562c7fbfd94</item>
+        <item>b6cca1572e3f46ab997d52fa4ca3df5f</item>
+        <item>9e9cee4351424e549ea1dd40bc4bcc46</item>
+
+        <item>e8cdd451d02a4e0987c803f90256f5c2</item>
+        <item>60a8216592b84a74b832ba6903a4b619</item>
+        <item>d9b95d3103bc4362b1c89dfc24bf0db3</item>
+        <item>9a2d015ce34c4e418c55bad669e6c27f</item>
+        <item>03cfa9e97c2e4b67b5e04578cfccdc28</item>
+
+        <item>4bda5519457f49a8964814d6153259ab</item>
+        <item>dddaf153653246f5966a83a1357a3af7</item>
+        <item>0ed766bf36e84e47a508442fa0f36fce</item>
+        <item>bfd2514b89d74ae793dd5748904bc7d6</item>
+        <item>930e0b1d73e14c85be2ef570dffbb269</item>
+
+        <item>67be8049f42f4d329e7a45d57d0e4b3c</item>
+        <item>b9368e014fb548b2b78dc23fd3e6b2db</item>
+        <item>58d2d61b1686447db1abe3ba31a45567</item>
+        <item>36c867848e604586b99b114b80428e80</item>
+        <item>ba5a41197f874359a3fec89a4660cd60</item>
+        <item>d52af70f03b74b7b975593efe997e787</item>
+    </string-array>
+
+
+    <string name="app_name">NewsGetter</string>
     <string name="headlines_button">Naslovnice</string>
     <string name="home_button">Vijesti iz Hrvatske</string>
     <string name="search_button">Pretraži</string>
@@ -19,9 +57,12 @@
     <string name="search_item">Pretraži</string>
     <string name="favorites_item">Favoriti</string>
 
+    <string name="empty_source_toast">Žao nam je, za ovaj izvor trenutno ne postoje vijesti.</string>
+
     <string name="select_all_text">Označi sve</string>
     <string name="unselect_all_text">Odznači sve</string>
 
+    <string name="delete_favorites">Obriši sve</string>
     <string name="no_favorites">Nemate favorite</string>
 
     <string name="search_hint">Pretraži vijesti...</string>

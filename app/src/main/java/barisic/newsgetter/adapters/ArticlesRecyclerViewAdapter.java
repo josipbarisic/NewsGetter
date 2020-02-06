@@ -1,7 +1,6 @@
 package barisic.newsgetter.adapters;
 
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,9 +100,7 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if(viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
                     favoriteViewModel.insertFavorite(favorite);
 
-                    Log.d("LIKED_ID", "onClick: " + viewHolder.getLayoutPosition());
                     notifyDataSetChanged();
-
                 }
                 else{
                     favoriteViewModel.deleteFavorite(favorite.getUrl());
@@ -111,7 +108,6 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     if(fragmentName.equals("FavoritesFragment")){
                         dataset.remove(article);
                     }
-                    Log.d("DISLIKED_ID", "onClick: " + viewHolder.getAdapterPosition());
                     notifyDataSetChanged();
                 }
             }
@@ -149,23 +145,18 @@ public class ArticlesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     for(Favorite favorite: favorites){
                         if(viewHolder.articleUrl.equals(favorite.getUrl())){
                             vhPosition.add(viewHolder.getAdapterPosition());
-
-                            Log.d("Articles_adapter", "ADD position vhArray:" + vhPosition.toString());
                         }
                     }
                 }
                 //Provjera pozicije clanka (u adapteru) i postavljanje buttona u like ili dislike drawable kod RecyclerView elemenata
                 if(!vhPosition.isEmpty() && !vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
                     viewHolder.viewSwitcher.showPrevious();
-                    Log.d("ARTICLE_DISLIKER", "onBindViewHolder: DISLIKING");
                 }
                 else if(!vhPosition.isEmpty() && vhPosition.contains(viewHolder.getAdapterPosition()) && viewHolder.viewSwitcher.getCurrentView() == viewHolder.likeContainer){
                     viewHolder.viewSwitcher.showNext();
-                    Log.d("ARTICLE_LIKER", "onBindViewHolder: LIKING");
                 }
                 else if(vhPosition.isEmpty() && viewHolder.viewSwitcher.getCurrentView() == viewHolder.dislikeContainer){
                     viewHolder.viewSwitcher.showPrevious();
-                    Log.d("ARTICLE_DISLIKER", "onBindViewHolder: DISLIKING");
                 }
                 //-----------------------------------------------------
             }

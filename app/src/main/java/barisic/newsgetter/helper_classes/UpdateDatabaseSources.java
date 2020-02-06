@@ -1,14 +1,13 @@
 package barisic.newsgetter.helper_classes;
-
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
 import barisic.newsgetter.news_api_classes.NewsApiSources;
 import barisic.newsgetter.news_api_classes.Source;
 import retrofit2.Call;
@@ -20,14 +19,12 @@ public class UpdateDatabaseSources implements Callback<NewsApiSources> {
     private final static String url = "sources?apiKey=38fbf5c450684e339b0e300b7bd7f8ea";
     private final static String TAG = "Firebase UpdateSources";
 
-    private static FirebaseDatabase database;
     private static DatabaseReference dbReference;
-    private ArrayList<Source> sources;
 
     public static void updateInstance(){
         UpdateDatabaseSources instance = new UpdateDatabaseSources();
 
-        database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
 
         dbReference = database.getReference("sources");
         ApiManager.getInstance().getSourcesService().getApiSources(url).enqueue(instance);
@@ -36,14 +33,14 @@ public class UpdateDatabaseSources implements Callback<NewsApiSources> {
     }
 
     @Override
-    public void onResponse(Call<NewsApiSources> call, Response<NewsApiSources> response) {
+    public void onResponse(@NonNull Call<NewsApiSources> call, Response<NewsApiSources> response) {
 
         String id;
         String domain;
 
-        if(response.isSuccessful()){
+        if(response.body() != null && response.isSuccessful()){
 
-            sources = response.body().getSources();
+            ArrayList<Source> sources = response.body().getSources();
 
 
             id = dbReference.push().getKey();
@@ -79,7 +76,7 @@ public class UpdateDatabaseSources implements Callback<NewsApiSources> {
     }
 
     @Override
-    public void onFailure(Call<NewsApiSources> call, Throwable t) {
+    public void onFailure(@NonNull Call<NewsApiSources> call,@NonNull Throwable t) {
 
     }
 }

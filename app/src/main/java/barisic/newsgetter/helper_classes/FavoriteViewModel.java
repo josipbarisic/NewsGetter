@@ -9,8 +9,8 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+import barisic.newsgetter.db_classes.DatabaseManager;
 import barisic.newsgetter.db_classes.Favorite;
-import barisic.newsgetter.db_classes.FavoritesDatabase;
 import barisic.newsgetter.interfaces.FavoriteDAO;
 
 public class FavoriteViewModel extends AndroidViewModel {
@@ -19,7 +19,7 @@ public class FavoriteViewModel extends AndroidViewModel {
 
     public FavoriteViewModel(@NonNull Application application) {
         super(application);
-        favoriteDAO = FavoritesDatabase.getInstance(application).favoriteDAO();
+        favoriteDAO = DatabaseManager.getFavoritesInstance(application).favoriteDAO();
         favoritesLiveList = favoriteDAO.getFavoritesUpdate();
     }
 
@@ -36,11 +36,11 @@ public class FavoriteViewModel extends AndroidViewModel {
         return favoritesLiveList;
     }
 
-    private class InsertFavoriteAsync extends AsyncTask<Favorite, Void, Void>{
+    private static class InsertFavoriteAsync extends AsyncTask<Favorite, Void, Void>{
 
         private FavoriteDAO favoriteDAO;
 
-        public InsertFavoriteAsync(FavoriteDAO favoriteDAO){
+        private InsertFavoriteAsync(FavoriteDAO favoriteDAO){
             this.favoriteDAO = favoriteDAO;
         }
 
@@ -51,11 +51,11 @@ public class FavoriteViewModel extends AndroidViewModel {
         }
     }
 
-    private class DeleteFavoriteAsync extends AsyncTask<String, Void, Void>{
+    private static class DeleteFavoriteAsync extends AsyncTask<String, Void, Void>{
 
         private FavoriteDAO favoriteDAO;
 
-        public DeleteFavoriteAsync(FavoriteDAO favoriteDAO){
+        private DeleteFavoriteAsync(FavoriteDAO favoriteDAO){
             this.favoriteDAO = favoriteDAO;
         }
 

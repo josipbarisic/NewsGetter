@@ -1,5 +1,4 @@
 package barisic.newsgetter.fragments;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,31 +7,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
-
 import barisic.newsgetter.R;
 import barisic.newsgetter.MainActivity;
 import barisic.newsgetter.adapters.SourcesRecyclerViewAdapter;
 import barisic.newsgetter.helper_classes.SourceViewModel;
-import barisic.newsgetter.helper_classes.UpdateArticlesApiCall;
 
 public class SettingsFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private Button btnConfirm;
     private Button btnSelectUnselectAll;
 
@@ -42,7 +35,6 @@ public class SettingsFragment extends Fragment {
     private ArrayList<Integer> selectedSources = new ArrayList<>();
 
     private SourceViewModel viewModel;
-    private DatabaseReference dbSources;
 
     public static SettingsFragment newInstance(){
         return new SettingsFragment();
@@ -58,8 +50,6 @@ public class SettingsFragment extends Fragment {
 
         viewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
 
-//        UpdateArticlesApiCall.loadArticles("abc-news");
-
         getSources(view);
 
         return view;
@@ -67,15 +57,16 @@ public class SettingsFragment extends Fragment {
 
     private void getSources(final View view){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dbSources = database.getReference("sources");
+        DatabaseReference dbSources = database.getReference("sources");
         dbSources.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    namesList.add(snap.child("name").getValue().toString());
-                    domainsList.add(snap.child("domain").getValue().toString());
-                    urlsList.add(snap.child("url").getValue().toString());
+                    namesList.add(String.valueOf(snap.child("name").getValue()));
+                    domainsList.add(String.valueOf(snap.child("domain").getValue()));
+                    urlsList.add(String.valueOf(snap.child("url").getValue()));
                 }
+
                 initRecyclerView(view, namesList, domainsList, urlsList);
             }
 
@@ -87,8 +78,8 @@ public class SettingsFragment extends Fragment {
 
     }
 
-    public void initRecyclerView(View view, ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
-        recyclerView = view.findViewById(R.id.sources_recycler_view);
+    private void initRecyclerView(View view, ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls){
+        RecyclerView recyclerView = view.findViewById(R.id.sources_recycler_view);
         final SourcesRecyclerViewAdapter adapter = new SourcesRecyclerViewAdapter(names, domains, urls, viewModel.getAllSources());
 
         recyclerView.setAdapter(adapter);
@@ -96,7 +87,7 @@ public class SettingsFragment extends Fragment {
 
         adapter.checkSelectedSources(viewModel.getAllSources());
 
-        if(viewModel.getAllSources().size() == 120){
+        if(viewModel.getAllSources().size() == adapter.getItemCount()){
             btnSelectUnselectAll.setText(R.string.unselect_all_text);
         }
 

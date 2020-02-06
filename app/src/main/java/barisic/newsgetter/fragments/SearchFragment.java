@@ -1,8 +1,5 @@
 package barisic.newsgetter.fragments;
-
-import android.content.Context;
 import android.os.Bundle;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
@@ -23,7 +18,6 @@ public class SearchFragment extends Fragment {
 
     private static final String TAG = "SearchFragment";
 
-    private SearchView searchView;
     private ViewSwitcher viewSwitcher;
     private TextView header;
 
@@ -37,9 +31,13 @@ public class SearchFragment extends Fragment {
 
         final View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        getFragmentManager().beginTransaction().replace(R.id.recommended_news_layout, NewsFragment.newInstance("-recommended-news-")).commit();
+        if(getFragmentManager() != null){
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.recommended_news_layout, new NewsFragment("-recommended-news-", getContext()))
+                    .commit();
+        }
 
-        searchView = view.findViewById(R.id.search_view);
+        SearchView searchView = view.findViewById(R.id.search_view);
         viewSwitcher = view.findViewById(R.id.view_switcher);
         header = view.findViewById(R.id.header_text);
 
@@ -51,14 +49,15 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d(TAG, "onQueryTextSubmit: QUERY");
-                if (!query.matches("")){
-                    getFragmentManager().beginTransaction().replace(R.id.searched_news_layout, NewsFragment.newInstance("searchQuery-" + query)).commit();
+                if (!query.matches("") && getFragmentManager() != null){
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.searched_news_layout, new NewsFragment("searchQuery-" + query, getContext()))
+                            .commit();
                     if(viewSwitcher.getCurrentView() == recommendedLayout){
                         viewSwitcher.showNext();
                         header.setText(R.string.results_text);
                     }
                 }
-
                 return true;
             }
 
@@ -70,7 +69,6 @@ public class SearchFragment extends Fragment {
                         header.setText(R.string.recommended_text);
                     }
                 }
-
                 return true;
             }
         });

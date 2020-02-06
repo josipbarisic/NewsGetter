@@ -3,8 +3,6 @@ package barisic.newsgetter.db_classes;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-import barisic.newsgetter.news_api_classes.Article;
-
 @Entity(tableName = "favorites_table")
 public class Favorite {
 

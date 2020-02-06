@@ -1,7 +1,6 @@
 package barisic.newsgetter.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,20 +26,17 @@ import barisic.newsgetter.helper_classes.SourceViewModel;
 
 public class MyNewsFragment extends Fragment {
 
-    private final String TAG = "MyNewsFragment";
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
+//    private final String TAG = "MyNewsFragment";
     private static BottomNavigationView bottomNavigationView;
 
     public static MyNewsFragment newInstance(BottomNavigationView bottomNavigation){
         bottomNavigationView = bottomNavigation;
 
-        MyNewsFragment fragment = new MyNewsFragment();
-        return fragment;
+        return new MyNewsFragment();
     }
-
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private SourceViewModel sourceViewModel;
-
 
     @Nullable
     @Override
@@ -50,23 +46,28 @@ public class MyNewsFragment extends Fragment {
         tabLayout = view.findViewById(R.id.news_tab_layout);
         viewPager = view.findViewById(R.id.news_view_pager);
 
-        final ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager());
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getFragmentManager(), getContext());
 
-        sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
+        SourceViewModel sourceViewModel = ViewModelProviders.of(this).get(SourceViewModel.class);
 
         sourceViewModel.getSourcesUpdate().observe(this, new Observer<List<Source>>() {
             @Override
             public void onChanged(List<Source> sources) {
-                Log.d(TAG, "onCreateView: SourceViewModel");
                 //POSTAVLJANJE FRAGMENATA U ViewPagerAdapter
                 adapter.resetFragments(sources);
 
                 if(adapter.getCount() == 0){
 
+                    viewPager.setVisibility(View.GONE);
+                    tabLayout.setVisibility(View.GONE);
+
                     bottomNavigationView.setSelectedItemId(R.id.nav_sources);
 
-
                     Toast.makeText(view.getContext(), getResources().getString(R.string.no_sources_warning), Toast.LENGTH_LONG).show();
+                }
+                else{
+                    viewPager.setVisibility(View.VISIBLE);
+                    tabLayout.setVisibility(View.VISIBLE);
                 }
             }
         });

@@ -9,17 +9,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +26,6 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private ArrayList<Integer> selectedPositions = new ArrayList<>();
 
-    private final String logoScraper = "https://logo.clearbit.com/";
-    private CustomViewHolder viewHolder;
-
     public SourcesRecyclerViewAdapter(ArrayList<String> names, ArrayList<String> domains, ArrayList<String> urls, List<Source> sources){
         this.namesDataset = names;
         this.domainsDataset = domains;
@@ -47,14 +36,14 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.sources_list_item, parent, false);
-        viewHolder = new CustomViewHolder(view);
 
-        return viewHolder;
+        return new CustomViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         final CustomViewHolder viewHolder = (CustomViewHolder) holder;
+        final String logoScraper = "https://logo.clearbit.com/";
         String url = urlsDataset.get(position);
 
         Log.d("CHECKER", "checkSelectedSources: " + selectedPositions.toString());
@@ -99,10 +88,7 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolder.viewSwitcher.showPrevious();
         }
 
-        Log.d("BINDER_SELECTED", "Positions: " + selectedPositions);
-
         viewHolder.tvUnselectedSourceName.setText(namesDataset.get(position));
-
         viewHolder.tvSelectedSourceName.setText(namesDataset.get(position));
     }
 
@@ -116,20 +102,15 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void setSelectedPositions(String positions) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("sources");
-
         if(positions.equals("all")){
             selectedPositions.clear();
             for(int i = 0; i < getItemCount(); i++){
                 selectedPositions.add(i);
             }
-            Log.d("SELECTED_POSITIONS:", "setSelectedPositions SELECT: " + selectedPositions.toString());
         }
         else{
             selectedPositions.clear();
             sourcesDataset.clear();
-            Log.d("SELECTED_POSITIONS:", "setSelectedPositions UNSELECT: " + selectedPositions.toString());
         }
         notifyDataSetChanged();
     }
@@ -157,7 +138,7 @@ public class SourcesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         TextView tvUnselectedSourceName;
         TextView tvSelectedSourceName;
 
-        public CustomViewHolder(View view){
+        private CustomViewHolder(View view){
             super(view);
 
             viewSwitcher = view.findViewById(R.id.viewSwitcher);

@@ -1,15 +1,11 @@
 package barisic.newsgetter;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-
 import android.os.Bundle;
 import android.view.MenuItem;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import barisic.newsgetter.fragments.FavoritesFragment;
 import barisic.newsgetter.fragments.MyNewsFragment;
 import barisic.newsgetter.fragments.SearchFragment;
@@ -17,37 +13,14 @@ import barisic.newsgetter.fragments.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity{
 
-    String TAG = "MainActivity";
+//   private final String TAG = "MainActivity";
 
     BottomNavigationView bottomNavigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /*final AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage(R.string.headlines_button);
-        alert.setPositiveButton(R.string.confirm_sources, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "OK", Toast.LENGTH_SHORT).show();
-            }
-        });
-        alert.setNegativeButton(R.string.dislike_text, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(MainActivity.this, "NOT_OK", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        alert.setPositiveButtonIcon(this.getResources().getDrawable(R.drawable.newsgetter_logo));
-        alert.setView(this.getResources().get(R.drawable.like_drawable))
-        alert.show();*/
-
-//        UpdateDatabaseSources.updateInstance();
-//        UpdateSourceArticles.update();
 
         bottomNavigationView = findViewById(R.id.bottom_nav);
 

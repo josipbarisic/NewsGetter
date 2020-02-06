@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="apiKey">38fbf5c450684e339b0e300b7bd7f8ea</string>
-
-    <string name="app_name">News Getter</string>
+    <string name="app_name">NewsGetter</string>
     <string name="headlines_button">Headlines</string>
     <string name="home_button">News from Croatia</string>
     <string name="search_button">Search</string>
@@ -20,9 +18,13 @@
     <string name="search_item">Search</string>
     <string name="favorites_item">Favorites</string>
 
+    <string name="empty_source_toast">Sorry, this one\'s empty.</string>
+
+
     <string name="select_all_text">Select all</string>
     <string name="unselect_all_text">Unselect all</string>
 
+    <string name="delete_favorites">Delete All</string>
     <string name="no_favorites">You don\'t have any favorites</string>
 
     <string name="search_hint">Search the News&#8230;</string>
