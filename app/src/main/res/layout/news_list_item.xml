@@ -94,10 +94,12 @@
 
             <ImageView
                 android:id="@+id/likeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:background="@drawable/like_icon_drawable"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="3dp"/>
 
         </LinearLayout>
 
@@ -119,10 +121,12 @@
 
             <ImageView
                 android:id="@+id/dislikeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="27dp"
+                android:layout_height="27dp"
                 android:background="@drawable/liked_icon_drawable"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="3dp"/>
 
         </LinearLayout>
 
@@ -155,10 +159,11 @@
 
         <ImageView
             android:id="@+id/shareButton"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:background="@drawable/share_icon_drawable"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:layout_marginStart="10dp"/>
 
     </LinearLayout>
 

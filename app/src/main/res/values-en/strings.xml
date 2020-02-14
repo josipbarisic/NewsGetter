@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NewsGetter</string>
+    <string name="connection_message">\nPlease connect to the internet and restart the app!</string>
+    <string name="dismiss">OK</string>
     <string name="headlines_button">Headlines</string>
     <string name="home_button">News from Croatia</string>
     <string name="search_button">Search</string>

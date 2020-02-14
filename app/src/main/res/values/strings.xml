@@ -35,11 +35,35 @@
         <item>58d2d61b1686447db1abe3ba31a45567</item>
         <item>36c867848e604586b99b114b80428e80</item>
         <item>ba5a41197f874359a3fec89a4660cd60</item>
+
         <item>d52af70f03b74b7b975593efe997e787</item>
+        <item>1f5c713a1537498da23911fb76f5cad3</item>
+        <item>7e99c20ee039459dae2eb90a47ba26c2</item>
+        <item>5005257ced1e40a7acd50195cbfa2104</item>
+        <item>251f2752a0f04f4c8090a7247ce00e18</item>
+
+        <item>fbd4f4980f6d40f2aebd2cbe9f039d73</item>
+        <item>c4bb082f532c42278034818238cdba42</item>
+        <item>aa7201e962884b56a1cf51eb20f40644</item>
+        <item>47478d366070413eba241e7125f749cf</item>
+        <item>2ebd1b0d190d4647b9e10a06510c74c2</item>
+
+        <item>5884f9d29d884898b3a21cfc07242653</item>
+        <item>4f44ea1af0c3463ea233aa9ae1f21098</item>
+        <item>37c748e656444715a79d792a6fc17a16</item>
+        <item>8c64195520d24844897918deb4cf49bf</item>
+        <item>0504e59b7907469aa050dc7e148b2fd2</item>
+
+        <item>5283714e634e45e1bfa0f9830de61366</item>
+        <item>f6e1f10b59b34562b8b7bc07ec5cbd4b</item>
+        <item>0cd36da496fd4e499b3598e4e09bf31a</item>
+        <item>48968c825d76489da9230a96e28c2d2e</item>
+        <item>57df9e738d7a4133819925c42c1013da</item>
     </string-array>
 
-
     <string name="app_name">NewsGetter</string>
+    <string name="connection_message">\nMolimo spojite se na internet i ponovno pokrenite aplikaciju!</string>
+    <string name="dismiss">U redu</string>
     <string name="headlines_button">Naslovnice</string>
     <string name="home_button">Vijesti iz Hrvatske</string>
     <string name="search_button">Pretraži</string>
@@ -65,7 +89,7 @@
     <string name="delete_favorites">Obriši sve</string>
     <string name="no_favorites">Nemate favorite</string>
 
-    <string name="search_hint">Pretraži vijesti...</string>
+    <string name="search_hint">Pretraži vijesti&#8230;</string>
     <string name="recommended_text">Preporučene vijesti</string>
     <string name="results_text">Rezultati pretrage</string>
 
